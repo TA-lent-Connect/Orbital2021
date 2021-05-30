@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'https://talentconnect.herokuapp.com/api/listings'
+const baseUrl = '/api/listings'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
