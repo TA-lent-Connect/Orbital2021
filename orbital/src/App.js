@@ -1,7 +1,12 @@
+
 import React from 'react'
+import PageLogin from "./pages/PageLogin"
+import {isAdmin} from "./pages/PageLogin"
+import PageHome from "./pages/PageHome"
+
 const App = () => (
-  <div>
-    <h1>TA-lent Connect</h1>
+  <div> 
+   {isAdmin ? <PageHome></PageHome> : <PageLogin></PageLogin>}
   </div>
 )
 
