@@ -13,29 +13,29 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import App from '.././App';
 
-var isAdmin = false;
+let isAdmin = false;
 
 function handleLogin(loginValidation) {
     isAdmin = loginValidation;
-    console.log(isAdmin);
     return isAdmin;
 }
 
 export {isAdmin};
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://talentconnect.herokuapp.com/">
-        TA-Lent Connect
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+// function Copyright() {
+//   return (
+//     <Typography variant="body2" color="textSecondary" align="center">
+//       {'Copyright © '}
+//       <Link color="inherit" href="https://talentconnect.herokuapp.com/">
+//         TA-Lent Connect
+//       </Link>{' '}
+//       {new Date().getFullYear()}
+//       {'.'}
+//     </Typography>
+//   );
+// }
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -109,7 +109,7 @@ export default function SignIn() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <Button
+          {/* <Button
             type="submit"
             fullWidth
             variant="contained"
@@ -117,7 +117,7 @@ export default function SignIn() {
             className={classes.submit}
           >
             Sign In
-          </Button>
+          </Button> */}
           {/* <Button
             type="submit"
             fullWidth
@@ -127,7 +127,7 @@ export default function SignIn() {
           >
             Sign In via NUS
           </Button> */}
-          <Grid container>
+          {/* <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
@@ -138,12 +138,12 @@ export default function SignIn() {
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
-          </Grid>
+          </Grid> */}
         </form>
       </div>
-      <Box mt={8}>
+      {/* <Box mt={8}>
         <Copyright />
-      </Box>
+      </Box> */}
     </Container>
   );
 

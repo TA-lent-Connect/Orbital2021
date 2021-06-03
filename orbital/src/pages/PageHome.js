@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import Module from './components/Module'
-import Listing from './components/Listing'
-import listingService from './services/listings'
+import Module from '.././components/Module'
+import Listing from '.././components/Listing'
+import listingService from '.././services/listings'
 
 function PageHome() {
   const [modules, setModules] = useState([]);
