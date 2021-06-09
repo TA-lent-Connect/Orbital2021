@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Module from '.././components/Module'
 import Listing from '.././components/Listing'
+import Notification from '.././components/Notification'
 import listingService from '.././services/listings'
 
 function PageHome() {
@@ -9,6 +10,11 @@ function PageHome() {
   const [newFind, setNewFind] = useState('')
   const [listings, setListings] = useState([])
   const [newListing, setNewListing] = useState('')
+
+  const [errorMessage, setErrorMessage] = useState(null)
+
+  const [username, setUsername] = useState('') 
+  const [password, setPassword] = useState('') 
 
   useEffect(() => {
     axios
@@ -40,12 +46,25 @@ function PageHome() {
       })
   }
 
-  function handleListingChange(event) {
+  const handleListingChange = (event) => {
     setNewListing(event.target.value)
   }
 
-  function handleFindChange(event) {
+  const handleFindChange = (event) => {
     setNewFind(event.target.value)
+  }
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value)
+  }
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value)
+  }
+
+  const handleLogin = (event) => {
+    event.preventDefault()
+    console.log('logging in with', username, password)
   }
 
   const modulesToShow = modules.filter(module => {
@@ -54,6 +73,29 @@ function PageHome() {
 
   return (
     <div>
+    <Notification message={errorMessage} />
+    <h1>Login</h1>
+    <form onSubmit={handleLogin}>
+        <div>
+          username
+            <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={handleUsernameChange}
+          />
+        </div>
+        <div>
+          password
+            <input
+            type="password"
+            value={password}
+            name="Password"
+            onChange={handlePasswordChange}
+          />
+        </div>
+        <button type="submit">login</button>
+      </form>
     <h1>Listings</h1>
     <ul>
         {listings.map(listing => 
