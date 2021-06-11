@@ -17,7 +17,7 @@ const ListingForm = ({ createListing }) => {
   }
 
   return (
-    <div>
+    <div className="formDiv">
       <h2>Create a new Listing</h2>
 
       <form onSubmit={addListing}>
