@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import Module from './components/Module'
 import Listing from './components/Listing'
@@ -20,6 +20,8 @@ const App = () => {
   const [password, setPassword] = useState('') 
 
   const [user, setUser] = useState(null)
+
+  const listingFormRef = useRef()
 
   useEffect(() => {
     axios
@@ -47,6 +49,7 @@ const App = () => {
   }, [])  
 
   const addListing = (listingObject) => {
+    listingFormRef.current.toggleVisibility()
     listingService
       .create(listingObject)
       .then(returnedListing => {
@@ -104,7 +107,7 @@ const App = () => {
   )
 
   const listingForm = () => (
-    <Togglable buttonLabel="new listing">
+    <Togglable buttonLabel="new listing" ref={listingFormRef}>
       <ListingForm
         createListing={addListing}
       />
