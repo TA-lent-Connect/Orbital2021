@@ -1,20 +1,28 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
-import Module from '.././components/Module'
-import Listing from '.././components/Listing'
-import Notification from '.././components/Notification'
-import listingService from '.././services/listings'
+import Module from './components/Module'
+import Listing from './components/Listing'
+import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
+import ListingForm from './components/ListingForm'
+import Togglable from './components/Togglable'
+import listingService from './services/listings'
+import loginService from './services/login'
+import PageLogin from './pages/PageLogin'
 
-function PageHome() {
+const App = () => {
   const [modules, setModules] = useState([]);
   const [newFind, setNewFind] = useState('')
   const [listings, setListings] = useState([])
-  const [newListing, setNewListing] = useState('')
 
   const [errorMessage, setErrorMessage] = useState(null)
 
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
+
+  const [user, setUser] = useState(null)
+
+  const listingFormRef = useRef()
 
   useEffect(() => {
     axios
@@ -32,27 +40,31 @@ function PageHome() {
     })
   }, [])
 
-  const addListing = (event) => {
-    event.preventDefault()
-    const listingObject = {
-      module: newListing
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      listingService.setToken(user.token)
     }
+  }, [])  
 
+  const addListing = (listingObject) => {
+    listingFormRef.current.toggleVisibility()
     listingService
       .create(listingObject)
-        .then(returnedListing => {
+      .then(returnedListing => {
         setListings(listings.concat(returnedListing))
-        setNewListing('')
       })
-  }
-
-  const handleListingChange = (event) => {
-    setNewListing(event.target.value)
   }
 
   const handleFindChange = (event) => {
     setNewFind(event.target.value)
   }
+
+  const modulesToShow = modules.filter(module => {
+    return module.moduleCode.includes(newFind)
+  })
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value)
@@ -62,74 +74,89 @@ function PageHome() {
     setPassword(event.target.value)
   }
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('logging in with', username, password)
+    try {
+      const user = await loginService.login({
+        username, password,
+      })
+      listingService.setToken(user.token)
+      window.localStorage.setItem(
+        'loggedUser', JSON.stringify(user)
+      ) 
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
   }
 
-  const modulesToShow = modules.filter(module => {
-    return module.moduleCode.includes(newFind)
-  })
+  const loginForm = () => (
+    <Togglable buttonLabel="log in">
+      <PageLogin />
+      <LoginForm
+        username={username}
+        password={password}
+        handleUsernameChange={handleUsernameChange}
+        handlePasswordChange={handlePasswordChange}
+        handleSubmit={handleLogin}
+      />
+    </Togglable>   
+  )
+
+  const listingForm = () => (
+    <Togglable buttonLabel="new listing" ref={listingFormRef}>
+      <ListingForm
+        createListing={addListing}
+      />
+    </Togglable>
+  )
 
   return (
     <div>
-    <Notification message={errorMessage} />
-    <h1>Login</h1>
-    <form onSubmit={handleLogin}>
+      <Notification message={errorMessage} />
+      {user === null ?
+        loginForm() :
         <div>
-          username
-            <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={handleUsernameChange}
-          />
+          <p>{user.name} logged in</p>
+          <h1>My Listings</h1>
+          <ul>
+            {listings.filter(listing => {
+              return listing.user.username === user.username
+            }).map(myListing => 
+              <Listing key={myListing.id} listing={myListing} />
+            )}
+          </ul>
+          {listingForm()}
         </div>
-        <div>
-          password
-            <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    <h1>Listings</h1>
-    <ul>
-        {listings.map(listing => 
-            <Listing
-              key={listing.id} listing={listing}
-            />
-        )}
-      </ul>
-      <form onSubmit={addListing}>
-        <input
-          value={newListing}
-          onChange={handleListingChange}
-        />
-        <button type="submit">save</button>
-      </form>  
-
-      <h1>Modules</h1>
-      
-      <form>
-          <label>
-            find modules:
-            <input
-              value={newFind}
-              onChange={handleFindChange}
-            />
-          </label>
-        </form>
-        <div>
-          {modulesToShow.map(module => 
-              <Module key={module.moduleCode} module={module} />
+      }
+      <h1>Current Listings</h1>
+        <ul>
+          {listings.map(listing => 
+            <Listing key={listing.id} listing={listing} />
           )}
-        </div>
+        </ul>
+      <h1>Modules</h1>
+      <form>
+        <label>
+          find modules:
+          <input
+            value={newFind}
+            onChange={handleFindChange}
+          />
+        </label>
+      </form>
+      <div>
+        {modulesToShow.map(module => 
+            <Module key={module.moduleCode} module={module} />
+        )}
+      </div>
     </div>
   )
 }
 
-export default PageHome;
+export default App;

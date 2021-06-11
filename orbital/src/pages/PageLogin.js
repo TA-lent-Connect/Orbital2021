@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react'
+import listingService from '../services/listings'
+import loginService from '../services/login'
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,29 +14,19 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import App from '.././App';
 
-let isAdmin = false;
-
-function handleLogin(loginValidation) {
-    isAdmin = loginValidation;
-    return isAdmin;
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://material-ui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
 }
-
-export {isAdmin};
-
-// function Copyright() {
-//   return (
-//     <Typography variant="body2" color="textSecondary" align="center">
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://talentconnect.herokuapp.com/">
-//         TA-Lent Connect
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -56,10 +48,49 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+const PageLogin = ({ setUser, setErrorMessage }) => {
   const classes = useStyles();
-  const [newEmail, setNewEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+
+  const [username, setUsername] = useState('') 
+  const [password, setPassword] = useState('') 
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      listingService.setToken(user.token)
+    }
+  }, [])  
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value)
+  }
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value)
+  }
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    try {
+      const user = await loginService.login({
+        username, password,
+      })
+      listingService.setToken(user.token)
+      window.localStorage.setItem(
+        'loggedUser', JSON.stringify(user)
+      ) 
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -69,25 +100,21 @@ export default function SignIn() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Welcome to TA-Lent Connect!
+          Sign in
         </Typography>
-        <form
-        className={classes.form} noValidate
-        onSubmit = {handleSubmit}>
+        <form className={classes.form} noValidate onSubmit={ handleLogin }>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
             autoFocus
-            value = {newEmail}
-            onChange={(event) => {
-              setNewEmail(event.target.value);
-            }}
+            value={username}
+            onChange={handleUsernameChange}
           />
           <TextField
             variant="outlined"
@@ -99,16 +126,14 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
-            value = {newPassword}
-            onChange={(event) => {
-              setNewPassword(event.target.value);
-            }}
+            value={password}
+            onChange={handlePasswordChange}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          {/* <Button
+          <Button
             type="submit"
             fullWidth
             variant="contained"
@@ -116,40 +141,26 @@ export default function SignIn() {
             className={classes.submit}
           >
             Sign In
-          </Button> */}
-          {/* <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="secondary"
-            className={classes.submit}
-          >
-            Sign In via NUS
-          </Button> */}
-          {/* <Grid container>
+          </Button>
+          <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="/ForgotPassword" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/SignUp" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
-          </Grid> */}
+          </Grid>
         </form>
       </div>
-      {/* <Box mt={8}>
+      <Box mt={8}>
         <Copyright />
-      </Box> */}
+      </Box>
     </Container>
   );
+}
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    var loginValidation = false;
-    (newEmail === "admin" && newPassword === "password") ? (loginValidation = true) : (loginValidation = false);
-    handleLogin(loginValidation);
-}
-}
+export default PageLogin
