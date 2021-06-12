@@ -15,18 +15,15 @@ import PageSignUp from './pages/PageSignUp'
 const App = () => {
   const [user, setUser] = useState(null)
 
-  const [errorMessage, setErrorMessage] = useState(null)
-
   const logout = () => {
     window.localStorage.removeItem('loggedUser')
   }
 
 
-
+  console.log(user)
 
   return (
     <div className="App">
-      <Notification message={errorMessage} />
       { user === null ?
         <div className="loggedOut">
           <Router>
@@ -35,15 +32,24 @@ const App = () => {
                 <PageSignUp />
               </Route>
               <Route path="/">
-                <PageLogin setUser={setUser} setErrorMessage={setErrorMessage} /> 
+                <PageLogin setUser={setUser} /> 
               </Route>
             </Switch>
           </Router>
         </div> :
         <div className="loggedIn">
-          <p>{user.name} logged in</p>
-          <h1>My Listings</h1>
-          <button id="logout" onClick={logout}>logout</button>
+          {user.accountType === "Module Coordinator" ? 
+            <div className="ModuleCoordinator">
+              <p>{user.name} logged in</p>
+              <p>Access: {user.accountType}</p>
+              <button id="logout" onClick={logout}>logout</button>
+            </div> :
+            <div className="Student">
+              <p>{user.name} logged in</p>
+              <p>Access: {user.accountType}</p>
+              <button id="logout" onClick={logout}>logout</button>
+            </div>
+          }
         </div>
       }
     </div>

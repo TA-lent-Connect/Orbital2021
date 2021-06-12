@@ -11,6 +11,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import MenuItem from '@material-ui/core/MenuItem';
+import ErrorAlert from '../components/ErrorAlert'
+import SuccessAlert from '../components/SuccessAlert'
 
 function Copyright() {
   return (
@@ -52,6 +55,19 @@ const SignUp = () => {
   const [password, setPassword] = useState('')
   const [firstName, setFirstName] = useState('') 
   const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('') 
+  const [accountType, setAccountType] = useState('')
+
+  const [error, setError] = useState(null);
+  const [firstNameError, setFirstNameError] = useState(null);
+  const [lastNameError, setLastNameError] = useState(null);
+  const [usernameError, setUsernameError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [accountTypeError, setAccountTypeError] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [alert, setAlert] = useState(false);
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value)
@@ -69,24 +85,86 @@ const SignUp = () => {
     setLastName(event.target.value)
   }
 
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value)
+  }
+
+  const handleAccountTypeChange = (event) => {
+    setAccountType(event.target.value)
+  }
+
   const handleSignUp = async (event) => {
     event.preventDefault()
-    const newUser = {
-      name: firstName + " " + lastName,
-      username: username,
-      password: password
-    }
-    userService.create(newUser)
 
-    setFirstName('')
-    setLastName('')
-    setUsername('')
-    setPassword('')
+    console.log(success)
+
+    if (firstName.trim() === "") {
+      setFirstNameError("Invalid First Name")
+      setAlert(true)
+    } else {
+      setFirstNameError("")
+    }
+    
+    if (lastName.trim() === "") {
+      setLastNameError("Invalid Last Name")
+      setAlert(true)
+    } else {
+      setLastNameError("")
+    }
+    
+    if (username.trim() === "") {
+      setUsernameError("Invalid Username")
+      setAlert(true)
+    } else {
+      setUsernameError("")
+    }
+    
+    if (password.trim() === "") {
+      setPasswordError("Invalid Password")
+      setAlert(true)
+    } else {
+      setPasswordError("")
+    }
+    
+    if (email.trim() === "") {
+      setEmailError("Invalid Email")
+      setAlert(true)
+    } else {
+      setEmailError("")
+    }
+    
+    if (accountType === "") {
+      setAccountTypeError("Invalid Account Type")
+      setAlert(true)
+    } else {
+      setAccountTypeError("")
+    }
+    
+    if (firstName.trim() !== "" && lastName.trim() !== "" && username.trim() !== "" && password.trim() !== "" && email.trim() !== "" && accountType !== "") {
+      try {
+        const newUser = {
+          name: firstName + " " + lastName,
+          username: username,
+          password: password,
+          email: email,
+          accountType: accountType
+        }
+        const user = await userService.create(newUser)
+        setSuccess(true)
+        setSuccessAlert(true)
+      } catch (exception) {
+        setError("Username already taken")
+        setAlert(true)
+      }
+    }
+
 
   }
 
   return (
     <Container component="main" maxWidth="xs">
+      <ErrorAlert alert={alert} setAlert={setAlert} errorMessage={error ? error : "Invalid Field(s)"} />
+      <SuccessAlert alert={successAlert} setAlert={setSuccessAlert} successMessage={"User Successfully Created"} />
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -107,8 +185,11 @@ const SignUp = () => {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                error={firstNameError === "Invalid First Name"}
+                helperText={firstNameError}
                 value={firstName}
                 onChange={handleFirstNameChange}
+                disabled={success}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -120,8 +201,11 @@ const SignUp = () => {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lastName"
+                error={lastNameError === "Invalid Last Name"}
+                helperText={lastNameError}
                 value={lastName}
                 onChange={handleLastNameChange}
+                disabled={success}
               />
             </Grid>
             <Grid item xs={12}>
@@ -133,8 +217,11 @@ const SignUp = () => {
                 label="Username"
                 name="username"
                 autoComplete="username"
+                error={usernameError === "Invalid Username"}
+                helperText={usernameError}
                 value={username}
                 onChange={handleUsernameChange}
+                disabled={success}
               />
             </Grid>
             <Grid item xs={12}>
@@ -147,9 +234,47 @@ const SignUp = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error={passwordError === "Invalid Password"}
+                helperText={passwordError}
                 value={password}
                 onChange={handlePasswordChange}
+                disabled={success}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="email"
+                label="Email"
+                id="email"
+                autoComplete="email"
+                error={emailError === "Invalid Email"}
+                helperText={emailError}
+                value={email}
+                onChange={handleEmailChange}
+                disabled={success}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="accountType"
+                label="Account Type"
+                select
+                value={accountType}
+                id="accountType"
+                error={accountTypeError === "Invalid Account Type"}
+                helperText={accountTypeError}
+                onChange={handleAccountTypeChange}
+                disabled={success}
+              >
+                <MenuItem value={"Student"}>Student</MenuItem>
+                <MenuItem value={"Module Coordinator"}>Module Coordinator</MenuItem>
+              </TextField>
             </Grid>
           </Grid>
           <Button
@@ -158,10 +283,11 @@ const SignUp = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
+            href= {success ? "/" : ""}
           >
-            Sign Up
+            {success ? "Account created | Back to Sign In" : "Sign up"}
           </Button>
-          <Grid container justify="flex-end">
+          <Grid container>
             <Grid item>
               <Link href="/" variant="body2">
                 Already have an account? Sign in
