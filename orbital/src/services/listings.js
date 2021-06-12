@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = '/api/listings'
+const baseUrl = 'api/listings'
 
 let token = null
 
@@ -8,9 +8,9 @@ const setToken = newToken => {
 }
 
 const getAll = () => {
+  console.log("HELLO")
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
-  
 }
 
 const create = newObject => {

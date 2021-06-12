@@ -1,9 +1,16 @@
-import React from 'react'
+import React from 'react' 
 
 const Listing = ({ listing }) => {
   return (
     <div>
-        <li className="listing">{listing.module}</li>
+        {/* <p>{listing.module}</p> */}
+        <p>{listing.numberOfOpenings}</p>
+        {/* <p>{listing.applicationDeadline}</p>
+        <p>{listing.requirements}</p>
+        <p>{listing.jobScope}</p>
+        <p>{listing.otherInfo}</p>
+        <p>{listing.moduleCoordinators}</p>
+        <p>{listing.contactEmail}</p> */}
     </div>
   )
 }

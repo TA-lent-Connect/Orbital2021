@@ -87,6 +87,11 @@ const PageLogin = ({ setUser }) => {
       setUser(user)
       setUsername('')
       setPassword('')
+      if (user.accountType === "Module Coordinator") {
+         window.history.pushState("ModuleCoordinatorLandingPage","ModuleCoordinatorLandingPage", "/mymodules")
+       } else {
+         window.history.pushState("StudentLandingPage", "StudentLandingPage", "/listings")
+      }
     } catch (exception) {
       setAlert(true)
     }
