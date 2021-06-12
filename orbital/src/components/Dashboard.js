@@ -18,9 +18,7 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import {MainListItems} from '../components/StudentListItems';
-import Button from '@material-ui/core/Button';
-// import mainLogo from 'C:/Users/harla/Documents/NUS/Orbital/Project/orbital/public/logo.png';
+import { mainListItems, secondaryListItems } from './listItems';
 
 function Copyright() {
   return (
@@ -34,10 +32,6 @@ function Copyright() {
     </Typography>
   );
 }
-
-const logout = () => {
-    window.localStorage.removeItem('loggedUser')
-  }
 
 const drawerWidth = 240;
 
@@ -120,7 +114,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PageStudent = () => {
+export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -145,13 +139,13 @@ const PageStudent = () => {
           >
             <MenuIcon />
           </IconButton>
-          
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            TA-lent Connect
+            Dashboard
           </Typography>
-          {/* <img  src={mainLogo} /> */}
           <IconButton color="inherit">
-          <Button variant="contained" id="logout" onClick={logout}>logout</Button>
+            <Badge badgeContent={4} color="secondary">
+              <NotificationsIcon />
+            </Badge>
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -168,7 +162,9 @@ const PageStudent = () => {
           </IconButton>
         </div>
         <Divider />
-        <List>{MainListItems}</List>
+        <List>{mainListItems}</List>
+        <Divider />
+        <List>{secondaryListItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
@@ -198,5 +194,3 @@ const PageStudent = () => {
     </div>
   );
 }
-
-export default PageStudent

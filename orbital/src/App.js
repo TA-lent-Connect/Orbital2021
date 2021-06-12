@@ -11,12 +11,18 @@ import listingService from './services/listings'
 import loginService from './services/login'
 import PageLogin from './pages/PageLogin'
 import PageSignUp from './pages/PageSignUp'
+import PageProf from './pages/PageProf'
+import PageApplications from './pages/PageApplications'
+import PageListings from './pages/PageListings'
+import PageModules from './pages/PageModules'
+import PageMyModules from './pages/PageMyModules'
 
 const App = () => {
   const [user, setUser] = useState(null)
 
   const logout = () => {
     window.localStorage.removeItem('loggedUser')
+    window.history.pushState("SignUp", "SignUp", "/")
   }
 
 
@@ -40,6 +46,22 @@ const App = () => {
         <div className="loggedIn">
           {user.accountType === "Module Coordinator" ? 
             <div className="ModuleCoordinator">
+            <Router>
+              <Switch>
+                <Route path="/applications">
+                  <PageApplications />
+                </Route>
+                <Route path="/Listings">
+                  <PageListings />
+                </Route>
+                <Route path="/modules">
+                  <PageModules />
+                </Route>
+                <Route path="/mymodules">
+                  <PageMyModules />
+                </Route>
+              </Switch>
+            </Router>
               <p>{user.name} logged in</p>
               <p>Access: {user.accountType}</p>
               <button id="logout" onClick={logout}>logout</button>
