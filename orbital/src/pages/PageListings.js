@@ -226,11 +226,12 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function PageListings() {
+const PageListings = () => {
   const classes = useStyles();
+
   const [listings, setListings] = useState([])
 
-useEffect(() => {
+  useEffect(() => {
     listingService
       .getAll()
       .then(initialListings => {
@@ -265,11 +266,10 @@ useEffect(() => {
         </div>
       </Drawer>
       <main className={classes.content}>
-        <Toolbar />
-        {/* <Listing key={listings[0]} listing={listings[0]} /> */}
-        {/* <p>{listings[0].module}</p> */}
+        <Listing listing={listings[0]} />
       </main>
     </div>
   );
 }
 
+export default PageListings

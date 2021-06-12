@@ -3,7 +3,7 @@ import React from 'react'
 const Listing = ({ listing }) => {
   return (
     <div>
-        {/* <p>{listing.module}</p> */}
+        <p>{listing.module}</p>
         <p>{listing.numberOfOpenings}</p>
         {/* <p>{listing.applicationDeadline}</p>
         <p>{listing.requirements}</p>

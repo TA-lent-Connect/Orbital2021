@@ -32,6 +32,7 @@ const App = () => {
       })
   }, [])
 
+
   useEffect(() => {
     listingService
       .getAll()
@@ -40,14 +41,7 @@ const App = () => {
     })
   }, [])
 
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      listingService.setToken(user.token)
-    }
-  }, [])  
+  console.log(listings)
 
   const addListing = (listingObject) => {
     listingFormRef.current.toggleVisibility()
@@ -56,6 +50,7 @@ const App = () => {
       .then(returnedListing => {
         setListings(listings.concat(returnedListing))
       })
+
   }
 
   const handleFindChange = (event) => {
@@ -66,47 +61,8 @@ const App = () => {
     return module.moduleCode.includes(newFind)
   })
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value)
-  }
+  const listing=listings[0]
 
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value)
-  }
-
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    try {
-      const user = await loginService.login({
-        username, password,
-      })
-      listingService.setToken(user.token)
-      window.localStorage.setItem(
-        'loggedUser', JSON.stringify(user)
-      ) 
-      setUser(user)
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
-  }
-
-  const loginForm = () => (
-    <Togglable buttonLabel="log in">
-      <PageLogin />
-      <LoginForm
-        username={username}
-        password={password}
-        handleUsernameChange={handleUsernameChange}
-        handlePasswordChange={handlePasswordChange}
-        handleSubmit={handleLogin}
-      />
-    </Togglable>   
-  )
 
   const listingForm = () => (
     <Togglable buttonLabel="new listing" ref={listingFormRef}>
@@ -120,26 +76,15 @@ const App = () => {
     <div>
       <Notification message={errorMessage} />
       {user === null ?
-        loginForm() :
+        <p>hi</p> :
         <div>
           <p>{user.name} logged in</p>
           <h1>My Listings</h1>
-          <ul>
-            {listings.filter(listing => {
-              return listing.user.username === user.username
-            }).map(myListing => 
-              <Listing key={myListing.id} listing={myListing} />
-            )}
-          </ul>
           {listingForm()}
         </div>
       }
       <h1>Current Listings</h1>
-        <ul>
-          {listings.map(listing => 
-            <Listing key={listing.id} listing={listing} />
-          )}
-        </ul>
+
       <h1>Modules</h1>
       <form>
         <label>
@@ -159,4 +104,4 @@ const App = () => {
   )
 }
 
-export default App;
+export default PageHome;
