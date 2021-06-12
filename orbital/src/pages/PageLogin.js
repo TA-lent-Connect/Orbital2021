@@ -14,6 +14,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import ErrorAlert from '../components/ErrorAlert'
 
 function Copyright() {
   return (
@@ -48,11 +49,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PageLogin = ({ setUser, setErrorMessage }) => {
+const PageLogin = ({ setUser }) => {
   const classes = useStyles();
 
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
+
+  const [alert, setAlert] = useState(false);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -85,15 +88,13 @@ const PageLogin = ({ setUser, setErrorMessage }) => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      setAlert(true)
     }
   }
 
   return (
     <Container component="main" maxWidth="xs">
+      <ErrorAlert alert={alert} setAlert={setAlert} errorMessage={"Invalid Username or Password"} />
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -143,11 +144,6 @@ const PageLogin = ({ setUser, setErrorMessage }) => {
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link href="/ForgotPassword" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
             <Grid item>
               <Link href="/SignUp" variant="body2">
                 {"Don't have an account? Sign Up"}
