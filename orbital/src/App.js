@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import axios from 'axios'
-import Module from './components/Module'
-import Listing from './components/Listing'
-import Notification from './components/Notification'
-import LoginForm from './components/LoginForm'
-import ListingForm from './components/ListingForm'
-import Togglable from './components/Togglable'
-import listingService from './services/listings'
-import loginService from './services/login'
 import PageLogin from './pages/PageLogin'
 import PageSignUp from './pages/PageSignUp'
 import PageProf from './pages/PageProf'
@@ -19,6 +10,7 @@ import PageMyModules from './pages/PageMyModules'
 
 const App = () => {
   const [user, setUser] = useState(null)
+
 
   const logout = () => {
     window.localStorage.removeItem('loggedUser')
@@ -34,7 +26,7 @@ const App = () => {
         <div className="loggedOut">
           <Router>
             <Switch>
-              <Route path="/SignUp">
+              <Route path="/signup">
                 <PageSignUp />
               </Route>
               <Route path="/">
@@ -51,7 +43,7 @@ const App = () => {
                 <Route path="/applications">
                   <PageApplications />
                 </Route>
-                <Route path="/Listings">
+                <Route path="/listings">
                   <PageListings />
                 </Route>
                 <Route path="/modules">
@@ -60,11 +52,14 @@ const App = () => {
                 <Route path="/mymodules">
                   <PageMyModules />
                 </Route>
+                <Route path="/">
+                  <PageMyModules />
+                </Route>
               </Switch>
             </Router>
-              <p>{user.name} logged in</p>
+              {/* <p>{user.name} logged in</p>
               <p>Access: {user.accountType}</p>
-              <button id="logout" onClick={logout}>logout</button>
+              <button id="logout" onClick={logout}>logout</button> */}
             </div> :
             <div className="Student">
               <p>{user.name} logged in</p>

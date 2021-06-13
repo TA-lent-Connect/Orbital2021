@@ -24,19 +24,28 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Applications" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick= {() => {
+      window.history.pushState("MyModulesLandingPage","MyModulesLandingPage", "/mymodules");
+      window.location.reload(false);
+    }}>
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="MyModules" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick= {() => {
+      window.history.pushState("ListingsLandingPage","ListingsLandingPage", "/listings");
+      window.location.reload(false);
+    }}>
       <ListItemIcon>
         <FormatListBulletedIcon />
       </ListItemIcon>
       <ListItemText primary="Listings" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick= {() => {
+      window.history.pushState("ModulesLandingPage","ModulesLandingPage", "/modules");
+      window.location.reload(false);
+    }}>
       <ListItemIcon>
         <AppsIcon />
       </ListItemIcon>
