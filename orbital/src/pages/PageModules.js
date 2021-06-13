@@ -180,7 +180,9 @@
 
 // export default PageProf
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'
+import Module from '../components/Module'
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -224,6 +226,25 @@ const useStyles = makeStyles((theme) => ({
 export default function PageModules() {
   const classes = useStyles();
 
+  const [modules, setModules] = useState([]);
+  const [newFind, setNewFind] = useState('')
+
+  useEffect(() => {
+    axios
+      .get('https://api.nusmods.com/v2/2020-2021/moduleInfo.json')
+      .then(response => {
+        setModules(response.data)
+      })
+  }, [])
+
+  const handleFindChange = (event) => {
+    setNewFind(event.target.value)
+  }
+
+  const modulesToShow = modules.filter(module => {
+    return module.moduleCode.includes(newFind)
+  })
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -250,7 +271,23 @@ export default function PageModules() {
       <main className={classes.content}>
         <Toolbar />
         <Typography paragraph>
-        Modules
+          <div>
+            <h1>Modules</h1>
+            <form>
+              <label>
+                find modules:
+                <input
+                  value={newFind}
+                  onChange={handleFindChange}
+                />
+              </label>
+            </form>
+            <div>
+              {modulesToShow.map(module => 
+                <Module key={module.moduleCode} module={module} />
+              )}
+            </div>
+          </div>
         </Typography>
       </main>
     </div>

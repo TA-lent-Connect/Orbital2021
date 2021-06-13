@@ -11,6 +11,7 @@ import PageMyModules from './pages/PageMyModules'
 const App = () => {
   const [user, setUser] = useState(null)
 
+
   const logout = () => {
     window.localStorage.removeItem('loggedUser')
     window.history.pushState("SignUp", "SignUp", "/")
@@ -51,11 +52,14 @@ const App = () => {
                 <Route path="/mymodules">
                   <PageMyModules />
                 </Route>
+                <Route path="/">
+                  <PageMyModules />
+                </Route>
               </Switch>
             </Router>
-              <p>{user.name} logged in</p>
+              {/* <p>{user.name} logged in</p>
               <p>Access: {user.accountType}</p>
-              <button id="logout" onClick={logout}>logout</button>
+              <button id="logout" onClick={logout}>logout</button> */}
             </div> :
             <div className="Student">
               <p>{user.name} logged in</p>

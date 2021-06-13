@@ -240,7 +240,7 @@ const PageListings = () => {
   }, [])
 
   console.log(listings)
-  console.log(listings[0])
+  console.log(listings[1])
 
   return (
     <div className={classes.root}>
@@ -266,7 +266,10 @@ const PageListings = () => {
         </div>
       </Drawer>
       <main className={classes.content}>
-        <Listing listing={listings[0]} />
+        <Toolbar />
+        {listings.map((listing, index) => (
+          <Listing key={index} listing={listing} />
+        ))}
       </main>
     </div>
   );
