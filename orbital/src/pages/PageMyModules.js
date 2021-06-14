@@ -180,7 +180,8 @@
 
 // export default PageProf
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -195,6 +196,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { mainListItems } from '../components/ProfListItems';
+import CreateNewListing from '../components/CreateNewListing'
+import NewListingButton from '../components/NewListingButton';
+import Listing from '../components/Listing'
+import listingService from '../services/listings'
 
 const drawerWidth = 240;
 
@@ -221,8 +226,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PageMyModules() {
+export default function PageMyModules({user}) {
   const classes = useStyles();
+
+  const [listings, setListings] = useState([])
+
+  useEffect(() => {
+    listingService
+      .getAll()
+      .then(initialListings => {
+      setListings(initialListings)
+    })
+  }, [])
+
+  const addListing = (listingObject) => {
+    listingService
+      .create(listingObject)
+      .then(returnedListing => {
+        setListings(listings.concat(returnedListing))
+      })
+  }
+
+  const myListings = listings.filter(listing => {
+    return listing.user.username === user.username
+  })
 
   return (
     <div className={classes.root}>
@@ -249,9 +276,22 @@ export default function PageMyModules() {
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
-        <Typography paragraph>
-        My Modules
-        </Typography>
+        <Router>
+            <Switch>
+              <Route path="/mymodules/createnewlisting">
+                <CreateNewListing user={user} addListing={addListing} />
+              </Route>
+              <Route path="/mymodules">
+                <NewListingButton />
+                {myListings.map((listing, index) => (
+                  <Listing key={index} listing={listing} />
+                ))}
+              </Route>
+              <Route path="/">
+                <NewListingButton />
+              </Route>
+            </Switch>
+          </Router>
       </main>
     </div>
   );

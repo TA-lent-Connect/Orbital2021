@@ -12,10 +12,14 @@ const App = () => {
   const [user, setUser] = useState(null)
 
 
+
   const logout = () => {
     window.localStorage.removeItem('loggedUser')
-    window.history.pushState("SignUp", "SignUp", "/")
+    window.history.pushState("login", "Log In", "/login")
+    setUser(null)
   }
+
+
 
 
   console.log(user)
@@ -28,6 +32,9 @@ const App = () => {
             <Switch>
               <Route path="/signup">
                 <PageSignUp />
+              </Route>
+              <Route path="/login">
+                <PageLogin setUser={setUser} /> 
               </Route>
               <Route path="/">
                 <PageLogin setUser={setUser} /> 
@@ -50,7 +57,7 @@ const App = () => {
                   <PageModules />
                 </Route>
                 <Route path="/mymodules">
-                  <PageMyModules />
+                  <PageMyModules user={user}/>
                 </Route>
                 <Route path="/">
                   <PageMyModules />
