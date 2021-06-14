@@ -4,13 +4,16 @@ const Listing = ({ listing }) => {
   return listing !== undefined ? (
     <div>
       <p>{listing.module}</p>
-      <p>{listing.numberOfOpenings}</p>
-      <p>{listing.applicationDeadline}</p>
-      <p>{listing.requirements}</p>
+      <p>{listing.acadYear}</p>
+      <p>{listing.semester}</p>
+      <p>{listing.moduleCoordinator}</p>
+      <p>{listing.email}</p>
       <p>{listing.jobScope}</p>
+      <p>{listing.numberOfOpenings}</p>
+      <p>{listing.deadline}</p>
+      <p>{listing.requirements}</p>
+      <p>{listing.applicationProcess}</p>
       <p>{listing.otherInfo}</p>
-      <p>{listing.moduleCoordinators}</p>
-      <p>{listing.contactEmail}</p>
     </div>
   ) : null; // Or have some loading screen;
 };
