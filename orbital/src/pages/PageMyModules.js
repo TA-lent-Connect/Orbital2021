@@ -195,6 +195,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { mainListItems } from '../components/ProfListItems';
+import Logo from '../components/logo.png';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const drawerWidth = 240;
 
@@ -229,9 +231,19 @@ export default function PageMyModules() {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h6" noWrap>
-            Clipped drawer
-          </Typography>
+        <ListItem button>
+      <ListItemIcon>
+      <img src={Logo} />
+      </ListItemIcon>
+      <h1>  Lent Connect</h1>
+    </ListItem>
+
+    <ListItem button>
+      <ListItemIcon>
+      <ExitToAppIcon style={{fill: "white"}}/>
+      </ListItemIcon>
+      <ListItemText primary="Sign Out" />
+    </ListItem>
         </Toolbar>
       </AppBar>
       <Drawer
