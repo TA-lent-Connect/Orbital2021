@@ -50,7 +50,6 @@ const App = () => {
       .then(returnedListing => {
         setListings(listings.concat(returnedListing))
       })
-
   }
 
   const handleFindChange = (event) => {

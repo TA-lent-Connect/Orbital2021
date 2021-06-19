@@ -241,8 +241,6 @@ const PageListings = () => {
     })
   }, [])
 
-  console.log(listings)
-  console.log(listings[1])
 
   return (
     <div className={classes.root}>
