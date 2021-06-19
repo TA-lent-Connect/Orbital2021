@@ -200,6 +200,8 @@ import CreateNewListing from '../components/CreateNewListing'
 import NewListingButton from '../components/NewListingButton';
 import Listing from '../components/Listing'
 import listingService from '../services/listings'
+import Logo from '../components/logo.png';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const drawerWidth = 240;
 
@@ -224,6 +226,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+    fixedHeight: {
+    height: 200,
+  },
 }));
 
 export default function PageMyModules({user}) {
@@ -247,11 +252,19 @@ export default function PageMyModules({user}) {
       })
   }
 
+  console.log()
+
+  
   const myListings = listings.filter(listing => {
     if (user !== undefined) {
+<<<<<<< HEAD
       return listing.user.username === user.username
     }
     //return listing.user.username === user.username
+=======
+    return listing.user.username === user.username;
+    }
+>>>>>>> 46c147bf1c71acf1586fe879df1b9468afcd04db
   })
 
   return (
@@ -259,9 +272,23 @@ export default function PageMyModules({user}) {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h6" noWrap>
+        <ListItem button>
+      <ListItemIcon>
+      <img src={Logo} />
+      </ListItemIcon>
+      <h2>  Lent Connect</h2>
+    </ListItem>
+
+    <ListItem button>
+      <ListItemIcon>
+      <ExitToAppIcon style={{fill: "white"}}/>
+      </ListItemIcon>
+      <ListItemText primary="Sign Out" />
+    </ListItem>
+
+          {/* <Typography variant="h6" noWrap>
             Clipped drawer
-          </Typography>
+          </Typography> */}
         </Toolbar>
       </AppBar>
       <Drawer
