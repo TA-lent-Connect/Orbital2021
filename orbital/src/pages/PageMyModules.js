@@ -248,7 +248,10 @@ export default function PageMyModules({user}) {
   }
 
   const myListings = listings.filter(listing => {
-    return listing.user.username === user.username
+    if (user !== undefined) {
+      return listing.user.username === user.username
+    }
+    //return listing.user.username === user.username
   })
 
   return (
