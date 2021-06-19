@@ -198,6 +198,8 @@ import { mainListItems } from '../components/ProfListItems';
 import Listing from '../components/Listing'
 import listingService from '../services/listings'
 import LoginForm from '../components/LoginForm';
+import Logo from '../components/logo.png';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const drawerWidth = 240;
 
@@ -245,9 +247,19 @@ const PageListings = () => {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h6" noWrap>
-            Clipped drawer
-          </Typography>
+        <ListItem button>
+      <ListItemIcon>
+      <img src={Logo} />
+      </ListItemIcon>
+      <h1>  Lent Connect</h1>
+    </ListItem>
+
+    <ListItem button>
+      <ListItemIcon>
+      <ExitToAppIcon style={{fill: "white"}}/>
+      </ListItemIcon>
+      <ListItemText primary="Sign Out" />
+    </ListItem>
         </Toolbar>
       </AppBar>
       <Drawer

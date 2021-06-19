@@ -56,6 +56,9 @@ const App = () => {
                 <Route path="/modules">
                   <PageModules />
                 </Route>
+                {/* <Route path="/modules/">
+                  <PageModulesModuleCode />
+                </Route> */}
                 <Route path="/mymodules">
                   <PageMyModules user={user}/>
                 </Route>
