@@ -8,7 +8,6 @@ const setToken = newToken => {
 }
 
 const getAll = () => {
-  console.log("HELLO")
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
 }
@@ -26,4 +25,9 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, setToken }
+const destroy = (id) => {
+  const request = axios.delete(`${baseUrl}/${id}`)
+  return request.then(response => response.data)
+}
+
+export default { getAll, create, update, setToken, destroy }

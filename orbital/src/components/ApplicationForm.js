@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
-export default function ApplicationForm({numberOfOpenings, setNumberOfOpenings, deadline, setDeadline, requirements, setRequirements, applicationProcess, setApplicationProcess}) {
+export default function ApplicationForm({numberOfOpenings, setNumberOfOpenings, numberOfOpeningsError, deadline, setDeadline, deadlineError, requirements, setRequirements, applicationProcess, setApplicationProcess}) {
 
   const handleNumberOfOpeningsChange = (event) => {
     setNumberOfOpenings(event.target.value)
@@ -20,9 +20,9 @@ export default function ApplicationForm({numberOfOpenings, setNumberOfOpenings, 
     
   return (
     <React.Fragment>
-      <Typography variant="h6" gutterBottom>
+      {/* <Typography variant="h6" gutterBottom>
         Application Details
-      </Typography>
+      </Typography> */}
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <TextField
@@ -32,6 +32,8 @@ export default function ApplicationForm({numberOfOpenings, setNumberOfOpenings, 
             label="Number Of Openings"
             value={numberOfOpenings}
             onChange={handleNumberOfOpeningsChange}
+            error={numberOfOpeningsError === "Please input a valid number"}
+            helperText={numberOfOpeningsError}
           />
         </Grid>
         <Grid item xs={12}>
@@ -40,8 +42,11 @@ export default function ApplicationForm({numberOfOpenings, setNumberOfOpenings, 
             id="deadline"
             name="deadline"
             label="Deadline"
+            type="date"
             value={deadline}
             onChange={handleDeadlineChange}
+            error={deadlineError === "Please choose a deadline"}
+            helperText={deadlineError}
           />
         </Grid>
         <Grid item xs={12}>
