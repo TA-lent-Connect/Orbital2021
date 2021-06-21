@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import { useHistory } from 'react-router-dom'
+import ConfirmDeleteProf from '../components/ConfirmDeleteProf'
 
 const useStyles = makeStyles({
   root: {
@@ -19,32 +21,42 @@ const useStyles = makeStyles({
     transform: 'scale(0.8)',
   },
   title: {
-    fontSize: 14,
+    fontSize: 16,
   },
   pos: {
     marginBottom: 12,
   },
 });
 
-const Listing = ({ listing }) => {
+const ListingProf = ({ listing, setListingToEdit, deleteListing}) => {
   const classes = useStyles();
+
+  const history = useHistory();
 
   return listing !== undefined ? (
     <Grid item xs={12} sm={6}>
       <Card className={classes.root}>
         <CardActionArea>
           <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              {listing.module}
+            <Grid container spacing={3}>
+              <Grid item xs={10}>
+                <Typography className={classes.title} color="textSecondary" >
+                  <br></br>
+                  {listing.module}
+                </Typography>
+              </Grid>
+              <Grid item xs={2}>
+                <ConfirmDeleteProf listing={listing} deleteListing={deleteListing}/>
+              </Grid>
+            </Grid>
+            <Typography variant="h6" component="h2">
+              {listing.title}
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
+              <br></br>
+              <br></br>
+              AY {listing.acadYear} {listing.semester} <br></br>
               {listing.moduleCoordinator}
-            </Typography>
-            <Typography variant="body2" component="p">
-            <br></br>
-              Number of Openings: {listing.numberOfOpenings} <br></br>
-              Application Deadline: {listing.applicationDeadline} <br></br>
-              title: {listing.title}
             </Typography>
           </CardContent>
         </CardActionArea>
@@ -55,10 +67,16 @@ const Listing = ({ listing }) => {
           }}>
             View Listing
           </Button>
+          <Button size="small" color="primary" onClick= {() => {
+            history.push("/mymodules/editlisting");
+            setListingToEdit(listing)
+          }}>
+            Edit Listing
+          </Button>
         </CardActions>
       </Card>
     </Grid>
   ) : null; // Or have some loading screen;
 };
 
-export default Listing;
+export default ListingProf;

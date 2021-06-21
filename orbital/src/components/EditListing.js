@@ -13,6 +13,7 @@ import ApplicationForm from './ApplicationForm';
 import AttachmentForm from './AttachmentForm';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import ConfirmDelete from '../components/ConfirmDelete'
 import Grid from '@material-ui/core/Grid';
 
 function Copyright() {
@@ -60,28 +61,27 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
   button: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(0),
     marginLeft: theme.spacing(0),
-
   },
 }));
 
 
-export default function CreateNewListing({user, addListing, modules}) {
+export default function EditListing({user, editListing, modules, listingToEdit, deleteListing}) {
   const classes = useStyles();
 
-  const [module, setModule] = useState('')
-  const [title, setTitle] = useState('')
-  const [acadYear, setAcadYear] = useState('')
-  const [semester, setSemester] = useState('')
-  const [moduleCoordinator, setModuleCoordinator] = useState(user.name)
-  const [email, setEmail] = useState(user.email)
-  const [jobScope, setJobScope] = useState('')
-  const [numberOfOpenings, setNumberOfOpenings] = useState('')
-  const [deadline, setDeadline] = useState("2021-08-16")
-  const [requirements, setRequirements] = useState('')
-  const [applicationProcess, setApplicationProcess] = useState('')
-  const [otherInfo, setOtherInfo] = useState('')
+  const [module, setModule] = useState(listingToEdit.module)
+  const [title, setTitle] = useState(listingToEdit.title)
+  const [acadYear, setAcadYear] = useState(listingToEdit.acadYear)
+  const [semester, setSemester] = useState(listingToEdit.semester)
+  const [moduleCoordinator, setModuleCoordinator] = useState(listingToEdit.moduleCoordinator)
+  const [email, setEmail] = useState(listingToEdit.email)
+  const [jobScope, setJobScope] = useState(listingToEdit.jobScope)
+  const [numberOfOpenings, setNumberOfOpenings] = useState(listingToEdit.numberOfOpenings)
+  const [deadline, setDeadline] = useState(listingToEdit.deadline)
+  const [requirements, setRequirements] = useState(listingToEdit.requirements)
+  const [applicationProcess, setApplicationProcess] = useState(listingToEdit.applicationProcess)
+  const [otherInfo, setOtherInfo] = useState(listingToEdit.otherInfo)
 
   const [moduleError, setModuleError] = useState(null);
   const [acadYearError, setAcadYearError] = useState(null);
@@ -94,6 +94,7 @@ export default function CreateNewListing({user, addListing, modules}) {
 
 
   const [activeStep, setActiveStep] = React.useState(0);
+
 
   const handleNext = () => {
     if (activeStep === 0){
@@ -174,7 +175,7 @@ export default function CreateNewListing({user, addListing, modules}) {
     }
   }
 
-  const createNewListing = (event) => {
+  const updateListing = (event) => {
     event.preventDefault()
     const newListing = {
       module: module,
@@ -191,10 +192,11 @@ export default function CreateNewListing({user, addListing, modules}) {
       otherInfo: otherInfo
     }
     console.log(newListing)
-    addListing(newListing)
+    editListing(listingToEdit.id, newListing)
     setActiveStep(activeStep + 1);
 
   }
+
 
   return (
     <React.Fragment>
@@ -202,21 +204,21 @@ export default function CreateNewListing({user, addListing, modules}) {
       <main className={classes.layout}>
         <Paper className={classes.paper}>
           <Grid container spacing={3}>
-            <Grid item xs={2}>
+              <Grid item xs={2}>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography component="h2" variant="h6" align="center" color="primary">
+                  Edit Listing
+                </Typography> 	
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton 
+                  aria-label="delete"
+                  href="/mymodules">
+                  <CloseIcon />
+                </IconButton>
+              </Grid>
             </Grid>
-            <Grid item xs={8}>
-              <Typography component="h2" variant="h6" align="center" color="primary">
-                New Listing
-              </Typography> 	
-            </Grid>
-            <Grid item xs={2}>
-              <IconButton 
-                aria-label="delete"
-                href="/mymodules">
-                <CloseIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
           <Stepper activeStep={activeStep} className={classes.stepper}>
             {steps.map((label) => (
               <Step key={label}>
@@ -228,7 +230,7 @@ export default function CreateNewListing({user, addListing, modules}) {
             {activeStep === steps.length ? (
               <React.Fragment>
                 <Typography variant="h5" gutterBottom>
-                  Your Listing has been successfully created!
+                  Your Listing has been successfully updated!
                 </Typography>
                 <Typography variant="subtitle1">
                   <br></br>
@@ -249,21 +251,28 @@ export default function CreateNewListing({user, addListing, modules}) {
             ) : (
               <React.Fragment>
                 {getStepContent(activeStep)}
-                <div className={classes.buttons}>
-                  {activeStep !== 0 && (
-                    <Button onClick={handleBack} className={classes.button}>
-                      Back
-                    </Button>
-                  )}
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={activeStep === steps.length - 1 ? createNewListing : handleNext}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? 'Create Listing' : 'Next'}
-                  </Button>
-                </div>
+                <Grid container spacing={3}>
+                  <Grid item xs={6}>
+                    <ConfirmDelete listing={listingToEdit} deleteListing={deleteListing}/>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <div className={classes.buttons}>
+                      {activeStep !== 0 && (
+                        <Button onClick={handleBack} className={classes.button}>
+                          Back
+                        </Button>
+                      )}
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={activeStep === steps.length - 1 ? updateListing : handleNext}
+                        className={classes.button}
+                      >
+                        {activeStep === steps.length - 1 ? 'Update Listing' : 'Next'}
+                      </Button>
+                    </div>
+                  </Grid>
+                </Grid>
               </React.Fragment>
             )}
           </React.Fragment>

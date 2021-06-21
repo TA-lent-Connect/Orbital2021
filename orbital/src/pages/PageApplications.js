@@ -197,6 +197,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import { mainListItems } from '../components/ProfListItems';
 import Logo from '../components/logo.png';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import IconButton from '@material-ui/core/IconButton';
 
 const drawerWidth = 240;
 
@@ -206,6 +207,12 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+  },
+  taButton: {
+    marginRight: theme.spacing(2),
+  },
+  logoutButton: {
+    marginLeft: 'auto',
   },
   drawer: {
     width: drawerWidth,
@@ -223,27 +230,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PageApplications() {
+export default function PageApplications({logout}) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-        <ListItem button>
-      <ListItemIcon>
-      <img src={Logo} />
-      </ListItemIcon>
-      <h1>  Lent Connect</h1>
-    </ListItem>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.taButton}
+              color="inherit"
+              href="/mymodules"
+            >
+              <img src={Logo} />
+              <Typography variant="h6" noWrap>
+                &nbsp; Lent Connect
+              </Typography>
+            </IconButton>
 
-    <ListItem button>
-      <ListItemIcon>
-      <ExitToAppIcon style={{fill: "white"}}/>
-      </ListItemIcon>
-      <ListItemText primary="Sign Out" />
-    </ListItem>
+            <IconButton
+              edge="end"
+              color="inherit"
+              className={classes.logoutButton}
+              onClick={logout}
+            >
+              <ExitToAppIcon style={{fill: "white"}}/>
+              <Typography variant="h6" noWrap>
+                &nbsp; Sign Out
+              </Typography>
+            </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
