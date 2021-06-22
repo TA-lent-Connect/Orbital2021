@@ -30,10 +30,11 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
   },
   taButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(0),
   },
   logoutButton: {
     marginLeft: 'auto',
+    marginTop: theme.spacing(1),
   },
   drawer: {
     width: drawerWidth,
@@ -104,29 +105,41 @@ export default function PageMyModules({user, logout, modules}) {
       <CssBaseline />
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
-            <IconButton
-              edge="start"
-              className={classes.taButton}
-              color="inherit"
-              href="/mymodules"
-            >
-              <img src={Logo} />
-              <Typography variant="h6" noWrap>
-                &nbsp; Lent Connect
-              </Typography>
-            </IconButton>
-
-            <IconButton
-              edge="end"
-              color="inherit"
-              className={classes.logoutButton}
-              onClick={logout}
-            >
-              <ExitToAppIcon style={{fill: "white"}}/>
-              <Typography variant="body2" noWrap>
-                &nbsp; Sign Out
-              </Typography>
-            </IconButton>
+            <Grid container spacing={3}>
+              <Grid item xs={5}>
+                <Typography variant="body2" noWrap>
+                  <br></br>
+                  {user.name} | {user.accountType}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <IconButton
+                  justifyContent="center"
+                  edge="center"
+                  className={classes.taButton}
+                  color="inherit"
+                  href="/mymodules"
+                >
+                  <img src={Logo} />
+                  <Typography variant="h6" noWrap>
+                    &nbsp; Lent Connect
+                  </Typography>
+                </IconButton>
+              </Grid>
+              <Grid item xs={1}>
+                <IconButton
+                  edge="end"
+                  color="inherit"
+                  className={classes.logoutButton}
+                  onClick={logout}
+                >
+                  <ExitToAppIcon style={{fill: "white"}}/>
+                  <Typography variant="body2" noWrap>
+                    &nbsp; Sign Out
+                  </Typography>
+                </IconButton>
+              </Grid>
+            </Grid>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -151,6 +164,9 @@ export default function PageMyModules({user, logout, modules}) {
               </Route>
               <Route path="/mymodules/createnewlisting">
                 <CreateNewListing user={user} addListing={addListing} modules={modules} />
+              </Route>
+              <Route path="/mymodules/:moduleCode">
+                <ListingProf listing={listingToEdit} setListingToEdit={setListingToEdit} deleteListing={deleteListing} />
               </Route>
               <Route path="/mymodules">
                 <Grid container spacing={3}>

@@ -62,8 +62,8 @@ const ListingProf = ({ listing, setListingToEdit, deleteListing}) => {
         </CardActionArea>
         <CardActions>
           <Button size="small" color="primary" button onClick= {() => {
-            window.history.pushState("ListingModuleCodeLandingPage","ListingModuleCodeLandingPage", `/listings/${listing.module}`);
-            window.location.reload(false);
+            history.push(`/mymodules/${listing.module}`);
+            setListingToEdit(listing)
           }}>
             View Listing
           </Button>
