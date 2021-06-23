@@ -7,7 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 const useStyles = makeStyles({
   root: {
@@ -27,12 +28,21 @@ const useStyles = makeStyles({
   },
 });
 
-const Listing = ({ listing }) => {
+const ViewListing = ({ listing }) => {
   const classes = useStyles();
   const history = useHistory();
 
   return listing !== undefined ? (
-    <Grid item xs={12} sm={6}>
+    <Grid item xs={12}>
+    <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            className={classes.button}
+            startIcon={<KeyboardBackspaceIcon />}
+          >
+            Back    
+          </Button>
       <Card className={classes.root}>
         <CardActionArea>
           <CardContent>
@@ -49,22 +59,22 @@ const Listing = ({ listing }) => {
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
               <br></br>
-              <br></br>
               AY {listing.acadYear} {listing.semester} <br></br>
-              {listing.moduleCoordinator}
-            </Typography>
+              {listing.moduleCoordinator} <br></br>
+              </Typography>
+              <Typography variant="body1" color="textPrimary" component="p">
+                  <br></br>
+                  Requirements: <br></br>{listing.requirements} <br></br> <br></br>
+              Jobscope: <br></br>{listing.jobScope} <br></br><br></br>
+              Other information: <br></br>{listing.otherInfo} <br></br><br></br>
+              </Typography>
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="primary" button onClick= {() => {
-            history.push(`/listings/${listing.module}`);
-          }}>
-            View Listing
-          </Button>
         </CardActions>
       </Card>
     </Grid>
   ) : null; // Or have some loading screen;
 };
 
-export default Listing;
+export default ViewListing;

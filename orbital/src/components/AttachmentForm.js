@@ -36,6 +36,7 @@ export default function AttachmentForm({otherInfo, setOtherInfo}) {
             size="large"
             className={classes.button}
             startIcon={<AttachmentIcon />}
+            ng-click="submit()"
           >
             Upload File
           </Button>

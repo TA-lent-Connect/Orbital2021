@@ -5,9 +5,12 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import PageLogin from './pages/PageLogin'
 import PageSignUp from './pages/PageSignUp'
 import PageApplications from './pages/PageApplications'
-import PageListings from './pages/PageListings'
-import PageModules from './pages/PageModules'
+import PageListingsMC from './pages/PageListingsMC'
+import PageModulesMC from './pages/PageModulesMC'
 import PageMyModules from './pages/PageMyModules'
+import PageListingsStudent from './pages/PageListingsStudent'
+import PageModulesStudent from './pages/PageModulesStudent'
+import PageApply from './pages/PageApply'
 
 const customTheme = createMuiTheme({
   palette: {
@@ -89,13 +92,13 @@ const App = () => {
                 <Router>
                   <Switch>
                     <Route path="/applications">
-                      <PageApplications logout={logout} />
+                      <PageApplications user={user} logout={logout} modules={modules} />
                     </Route>
                     <Route path="/listings">
-                      <PageListings />
+                      <PageListingsMC user={user} logout={logout} modules={modules} />
                     </Route>
                     <Route path="/modules">
-                      <PageModules modules={modules} />
+                      <PageModulesMC user={user} logout={logout} modules={modules} />
                     </Route>
                     {/* <Route path="/modules/">
                       <PageModulesModuleCode />
@@ -104,15 +107,31 @@ const App = () => {
                       <PageMyModules user={user} logout={logout} modules={modules} />
                     </Route>
                     <Route path="/">
-                      <PageMyModules />
+                      <PageMyModules user={user} logout={logout} modules={modules}/>
                     </Route>
                   </Switch>
                 </Router>
               </div> :
               <div className="Student">
-                <p>{user.name} logged in</p>
-                <p>Access: {user.accountType}</p>
-                <button id="logout" onClick={logout}>logout</button>
+              <Router>
+                  <Switch>
+                    <Route path="/apply">
+                      <PageApply user={user} logout={logout} modules={modules} />
+                    </Route>
+                    <Route path="/listings">
+                      <PageListingsStudent user={user} logout={logout} modules={modules} />
+                    </Route>
+                    <Route path="/modules">
+                      <PageModulesStudent user={user} logout={logout} modules={modules} />
+                    </Route>
+                    {/* <Route path="/modules/">
+                      <PageModulesModuleCode />
+                    </Route> */}
+                    <Route path="/">
+                      <PageModulesStudent user={user} logout={logout} modules={modules}/>
+                    </Route>
+                  </Switch>
+                </Router>
               </div>
             }
           </div>
