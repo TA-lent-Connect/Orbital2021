@@ -109,7 +109,7 @@ export default function PageMyModules({user, logout, modules}) {
               <Grid item xs={5}>
                 <Typography variant="body2" noWrap>
                   <br></br>
-                  {user.name} | {user.accountType}
+                  {user !== undefined ? user.name : null} | {user !== undefined ? user.accountType : null}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
