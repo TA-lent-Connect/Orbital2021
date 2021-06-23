@@ -13,27 +13,39 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import AppsIcon from '@material-ui/icons/Apps';
 
-export const MainListItems = (
+export const mainListItems = (
   <div>
-    <ListItem button>
+    <ListItem button onClick= {() => {
+      window.history.pushState("ApplyLandingPage","ApplyLandingPage", "/apply");
+      window.location.reload(false);
+    }}>
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
       <ListItemText primary="Apply" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick= {() => {
+      window.history.pushState("ListingsLandingPage","ListingsLandingPage", "/listings");
+      window.location.reload(false);
+    }}>
       <ListItemIcon>
         <FormatListBulletedIcon />
       </ListItemIcon>
       <ListItemText primary="Listings" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick= {() => {
+      window.history.pushState("ModulesLandingPage","ModulesLandingPage", "/modules");
+      window.location.reload(false);
+    }}>
       <ListItemIcon>
         <AppsIcon />
       </ListItemIcon>
       <ListItemText primary="Modules" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick= {() => {
+      window.history.pushState("SettingsLandingPage","SettingsLandingPage", "/settings");
+      window.location.reload(false);
+    }}>
       <ListItemIcon>
         <SettingsIcon />
       </ListItemIcon>

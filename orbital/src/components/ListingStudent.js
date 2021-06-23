@@ -1,20 +1,19 @@
-import React, { useState, useEffect} from 'react'
-import ListItem from '@material-ui/core/ListItem';
-import { makeStyles } from '@material-ui/core/styles';
+import React from "react";
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import listingService from '../services/listings'
+import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import FavoriteModule from '../components/FavoriteModule'
+import { useHistory } from 'react-router-dom'
+import ConfirmDeleteProf from '../components/ConfirmDeleteProf'
 
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
+    maxWidth: "75%",
   },
   bullet: {
     display: 'inline-block',
@@ -22,38 +21,20 @@ const useStyles = makeStyles({
     transform: 'scale(0.8)',
   },
   title: {
-    fontSize: 14,
+    fontSize: 16,
   },
   pos: {
     marginBottom: 12,
   },
 });
 
-
-const Module = ({ module, user}) => {
+const ListingStudent = ({ listing}) => {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
-  const linktoNUSMods = `https://www.nusmods.com/modules/${module.moduleCode}`;
 
-//   const [listings, setListings] = useState([])
+  const history = useHistory();
 
-// useEffect(() => {
-//   listingService
-//     .getAll()
-//     .then(initialListings => {
-//     setListings(initialListings)
-//   })
-// }, [])
-
-// var listingExists = false;
-// for (listing in listings) {
-//   if ({module.moduleCode} === {listing.module}) {
-//     listingExists = true;
-//   }
-// }
-
-  return (
-      <Grid item xs={12}>
+  return listing !== undefined ? (
+    <Grid item xs={12} sm={6}>
       <Card className={classes.root}>
         <CardActionArea>
           <CardContent>
@@ -61,31 +42,36 @@ const Module = ({ module, user}) => {
               <Grid item xs={10}>
                 <Typography className={classes.title} color="textSecondary" >
                   <br></br>
-                  {module.moduleCode}
+                  {listing.module}
                 </Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <FavoriteModule module={module} user={user}/>
               </Grid>
             </Grid>
             <Typography variant="h6" component="h2">
-              {module.title}
+              {listing.title}
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
               <br></br>
               <br></br>
-              {module.description}
+              AY {listing.acadYear} {listing.semester} <br></br>
+              {listing.moduleCoordinator}
             </Typography>
           </CardContent>
         </CardActionArea>
         <CardActions>
-        <Button size="small" href={linktoNUSMods} target="_blank" color="primary">
-    Learn More
-        </Button>
+          <Button size="small" color="primary" button onClick= {() => {
+            history.push(`/listings/${listing.module}`);
+          }}>
+            View Listing
+          </Button>
+          <Button size="small" color="primary" onClick= {() => {
+            history.push(`/apply/${listing.module}`);
+          }}>
+            Apply
+          </Button>
         </CardActions>
       </Card>
     </Grid>
-);
-}
+  ) : null; // Or have some loading screen;
+};
 
-export default Module
+export default ListingStudent;
