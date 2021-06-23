@@ -17,7 +17,8 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import EditListing from '../components/EditListing'
+import EditListing from '../components/EditListing';
+import ViewListing from '../components/ViewListing';
 
 
 const drawerWidth = 230;
@@ -166,7 +167,7 @@ export default function PageMyModules({user, logout, modules}) {
                 <CreateNewListing user={user} addListing={addListing} modules={modules} />
               </Route>
               <Route path="/mymodules/:moduleCode">
-                <ListingProf listing={listingToEdit} setListingToEdit={setListingToEdit} deleteListing={deleteListing} />
+                <ViewListing listing={listingToEdit} />
               </Route>
               <Route path="/mymodules">
                 <Grid container spacing={3}>

@@ -1,5 +1,5 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useEffect, useRef } from 'react'
+import { formatMs, makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,11 +12,17 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import { mainListItems } from '../components/ProfListItems';
+import { mainListItems } from '../components/StudentListItems';
+import ListingStudent from '../components/ListingStudent'
+import listingService from '../services/listings'
+import LoginForm from '../components/LoginForm';
 import Logo from '../components/logo.png';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/Search';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 const drawerWidth = 240;
 
@@ -26,12 +32,6 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-  },
-  taButton: {
-    marginRight: theme.spacing(2),
-  },
-  logoutButton: {
-    marginLeft: 'auto',
   },
   drawer: {
     width: drawerWidth,
@@ -49,8 +49,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PageApplications({user, logout, modules}) {
+
+export default function PageListingsStudent({user, logout, modules}) {
   const classes = useStyles();
+
+  const [listings, setListings] = useState([])
+
+  const [newFind, setNewFind] = useState('')
+
+  const handleFindChange = (event) => {
+    setNewFind(event.target.value)
+  }
+
+  useEffect(() => {
+    listingService
+      .getAll()
+      .then(initialListings => {
+      setListings(initialListings)
+    })
+  }, [])
+
+  const ListingsToShow = listings.filter(listing => {
+    return listing.module.includes(newFind)
+  })
+
 
   return (
     <div className={classes.root}>
@@ -109,10 +131,33 @@ export default function PageApplications({user, logout, modules}) {
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
-        <Typography paragraph>
-        Applications
-        </Typography>
+        <Grid container spacing={3}>
+        <Grid item xs={12}>
+        <form>
+              <label>
+                <TextField
+                  className={classes.margin}
+                  id="input-with-icon-textfield"
+                  label="Module Code"
+                  value={newFind}
+                  onChange={handleFindChange}
+                  InputProps={{
+                  startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                   ),
+                  }}
+                />
+              </label>
+            </form>
+                  </Grid>
+                  {ListingsToShow.map((listing, index) => (
+          <ListingStudent key={index} listing={listing} />
+        ))}
+                </Grid>
       </main>
     </div>
   );
 }
+
