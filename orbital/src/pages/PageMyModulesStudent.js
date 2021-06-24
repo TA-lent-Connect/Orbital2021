@@ -1,26 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import { formatMs, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import { mainListItems } from '../components/StudentListItems';
+import { mainListItems } from '../components/ProfListItems';
 import ListingStudent from '../components/ListingStudent'
+import listingService from '../services/listings'
 import Logo from '../components/logo.png';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import TextField from '@material-ui/core/TextField';
-import SearchIcon from '@material-ui/icons/Search';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import Typography from '@material-ui/core/Typography';
 import ViewListingStudent from '../components/ViewListingStudent';
 
 
-const drawerWidth = 240;
+const drawerWidth = 230;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
   },
   taButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(0),
   },
   logoutButton: {
     marginLeft: 'auto',
@@ -50,25 +48,44 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
-  margin: {
-    marginTop: theme.spacing(3),
-  },
 }));
 
-
-export default function PageListingsStudent({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
+export default function PageMyModulesStudent({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
   const classes = useStyles();
-  
-  const [newFind, setNewFind] = useState('')
 
-
-  const handleFindChange = (event) => {
-    setNewFind(event.target.value)
+  const addListing = (listingObject) => {
+    listingService
+      .create(listingObject)
+      .then(returnedListing => {
+        setListings(listings.concat(returnedListing))
+      })
   }
 
-  const ListingsToShow = listings.filter(listing => {
-    return listing.module.toLowerCase().includes(newFind.toLowerCase().trim()) || listing.title.toLowerCase().includes(newFind.toLowerCase().trim())
+  const editListing = (id, listingObject) => {
+    listingService
+      .update(id, listingObject)
+      .then(returnedListing => {
+        setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
+      })
+  }
+
+  const deleteListing = (id) => {
+    listingService
+      .destroy(id)
+      .then(setListings(listings.filter(listing => {
+          return listing.id === id
+        }))
+      )
+  }
+
+
+  const myListings = listings.filter(listing => {
+    if (user !== undefined) {
+      return (listing.subscribers.filter(sub => sub === user.username).length === 1)
+    }
   })
+
+  console.log(listings)
 
 
   return (
@@ -80,7 +97,7 @@ export default function PageListingsStudent({user, logout, modules, listings, se
               <Grid item xs={5}>
                 <Typography variant="body2" noWrap>
                   <br></br>
-                  {user.name} | {user.accountType}
+                  {user !== undefined ? user.name : null} | {user !== undefined ? user.accountType : null}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
@@ -131,54 +148,20 @@ export default function PageListingsStudent({user, logout, modules, listings, se
         <Router>
             <Switch>
               <Route path="/listings/:moduleCode">
-                <ViewListingStudent user={user} listing={listingToEdit} listings={listings} setListings={setListings} />
+              <ViewListingStudent user={user} listing={listingToEdit} listings={listings} setListings={setListings} />
               </Route>
-              <Route path="/listings">
+              <Route path="/mymodules">
                 <Grid container spacing={3} alignItems="center">
-                  <Grid item xs={12}>
-                    <TextField
-                      className={classes.margin}
-                      id="input-with-icon-textfield"
-                      label="Module Code"
-                      value={newFind}
-                      onChange={handleFindChange}
-                      color="inherit"
-                      InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <SearchIcon />
-                        </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </Grid>
-                  {ListingsToShow.map((listing, index) => (
-                    <ListingStudent key={index} user={user} listing={listing} setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} />
-                  ))}
+                    {myListings.map((listing, index) => (
+                      <ListingStudent key={index} user={user} listing={listing} setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} />
+                    ))}
                 </Grid>
               </Route>
               <Route path="/">
-              <Grid container spacing={3} alignItems="center">
-                  <Grid item xs={12}>
-                    <TextField
-                      className={classes.margin}
-                      id="input-with-icon-textfield"
-                      label="Module Code"
-                      value={newFind}
-                      onChange={handleFindChange}
-                      color="inherit"
-                      InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <SearchIcon />
-                        </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </Grid>
-                  {ListingsToShow.map((listing, index) => (
-                    <ListingStudent key={index} user={user} listing={listing}  setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} />
-                  ))}
+                <Grid container spacing={3} alignItems="center">
+                    {myListings.map((listing, index) => (
+                      <ListingStudent key={index} user={user} listing={listing} setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} />
+                    ))}
                 </Grid>
               </Route>
             </Switch>
@@ -187,4 +170,3 @@ export default function PageListingsStudent({user, logout, modules, listings, se
     </div>
   );
 }
-

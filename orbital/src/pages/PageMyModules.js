@@ -88,6 +88,8 @@ export default function PageMyModules({user, logout, modules, listings, setListi
     }
   })
 
+  console.log(listings)
+
 
   return (
     <div className={classes.root}>

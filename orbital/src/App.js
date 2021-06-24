@@ -9,6 +9,7 @@ import PageApplications from './pages/PageApplications'
 import PageListingsMC from './pages/PageListingsMC'
 import PageModulesMC from './pages/PageModulesMC'
 import PageMyModules from './pages/PageMyModules'
+import PageMyModulesStudent from './pages/PageMyModulesStudent'
 import PageListingsStudent from './pages/PageListingsStudent'
 import PageModulesStudent from './pages/PageModulesStudent'
 import PageApply from './pages/PageApply'
@@ -127,13 +128,16 @@ const App = () => {
                       <PageApply user={user} logout={logout} modules={modules} />
                     </Route>
                     <Route path="/listings">
-                      <PageListingsStudent user={user} logout={logout} modules={modules} />
+                      <PageListingsStudent user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
                     </Route>
                     <Route path="/modules">
-                      <PageModulesStudent user={user} logout={logout} modules={modules} listings={listings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
+                      <PageModulesStudent user={user} setUser={setUser} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
+                    </Route>
+                    <Route path="/mymodules">
+                      <PageMyModulesStudent user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
                     </Route>
                     <Route path="/">
-                      <PageListingsStudent user={user} logout={logout} modules={modules} />
+                      <PageListingsStudent user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
                     </Route>
                   </Switch>
                 </Router>

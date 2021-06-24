@@ -188,7 +188,8 @@ export default function CreateNewListing({user, addListing, modules, initialModu
       deadline: deadline,
       requirements: requirements,
       applicationProcess: applicationProcess,
-      otherInfo: otherInfo
+      otherInfo: otherInfo,
+      subscribers: [user.username],
     }
     console.log(newListing)
     addListing(newListing)

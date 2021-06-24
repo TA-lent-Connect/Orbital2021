@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import listingService from '../services/listings'
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -31,15 +32,40 @@ const useStyles = makeStyles({
   },
 });
 
-const ViewListingStudent = ({ user, listing, setListingToEdit }) => {
+const ViewListingStudent = ({ user, listing , listings, setListings}) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const handleEdit = () => {
-    history.push("/mymodules/editlisting");
-    setListingToEdit(listing)
+  const [sub, setSub] = useState(listing.subscribers.filter(sub => sub === user.username).length === 1)
+
+  const editListing = (id, listingObject) => {
+    listingService
+      .update(id, listingObject)
+      .then(returnedListing => {
+        setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
+      })
   }
 
+
+  const handleSubChange = () => {
+    setSub(!sub)
+    console.log(sub)
+    console.log(user)
+    console.log(listing)
+    if (!sub) {
+      const changedSubscribers = listing.subscribers.concat(user.username)
+      console.log(changedSubscribers)
+      const changedListing = {...listing, subscribers: changedSubscribers}
+      editListing(listing.id, changedListing)
+    }
+    else {
+      const indexOfSub = listing.subscribers.indexOf(user.username)
+      const changedSubscribers = [...listing.subscribers.slice(0, indexOfSub), ...listing.subscribers.slice(indexOfSub + 1)]
+      console.log(changedSubscribers)
+      const changedListing = {...listing, subscribers: changedSubscribers}
+      editListing(listing.id, changedListing)
+    }
+  }
 
 
   return listing !== undefined ? (
@@ -67,11 +93,9 @@ const ViewListingStudent = ({ user, listing, setListingToEdit }) => {
                   </Typography>
                 </Grid>
                 <Grid item xs={2}>
-                  {user !== undefined && listing.user.username === user.username ? 
-                  <IconButton variant="outlined" color="primary" onClick={handleEdit}>
-                    <FavoriteIcon />
-                  </IconButton> :
-                  null}
+                  <IconButton variant="outlined" color="primary" onClick={handleSubChange}>
+                    {sub ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                  </IconButton>
                 </Grid>
               </Grid>
 

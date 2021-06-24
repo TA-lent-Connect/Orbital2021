@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PageModulesStudent({user, logout, modules, listings, listingToEdit, setListingToEdit}) {
+export default function PageModulesStudent({user, setUser, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
   const classes = useStyles();
 
   const [page, setPage] = useState(1)
@@ -143,7 +143,7 @@ export default function PageModulesStudent({user, logout, modules, listings, lis
         <Router>
             <Switch>
               <Route path="/listings/:moduleCode">
-                <ViewListingStudent listing={listingToEdit} />
+                <ViewListingStudent user={user} listing={listingToEdit} listings={listings} setListings={setListings} />
               </Route>
               <Route path="/modules">
                 <Grid container spacing={3} alignItems="center">
