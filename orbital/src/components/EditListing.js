@@ -214,7 +214,7 @@ export default function EditListing({user, editListing, modules, listingToEdit, 
               <Grid item xs={2}>
                 <IconButton 
                   aria-label="delete"
-                  href="/mymodules">
+                  onClick={() => {window.history.back()}}>
                   <CloseIcon />
                 </IconButton>
               </Grid>

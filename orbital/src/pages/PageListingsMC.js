@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { formatMs, makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -7,15 +8,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import { mainListItems } from '../components/ProfListItems';
 import Listing from '../components/Listing'
-import listingService from '../services/listings'
-import LoginForm from '../components/LoginForm';
 import Logo from '../components/logo.png';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Grid from '@material-ui/core/Grid';
@@ -23,6 +17,10 @@ import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import ViewListingL from '../components/ViewListingL';
+import listingService from '../services/listings'
+import EditListing from '../components/EditListing';
+
 
 const drawerWidth = 240;
 
@@ -32,6 +30,13 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+  },
+  taButton: {
+    marginRight: theme.spacing(2),
+  },
+  logoutButton: {
+    marginLeft: 'auto',
+    marginTop: theme.spacing(1),
   },
   drawer: {
     width: drawerWidth,
@@ -47,30 +52,41 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  margin: {
+    marginTop: theme.spacing(3),
+  },
 }));
 
 
-export default function PageListingsMC({user, logout, modules}) {
+export default function PageListingsMC({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
   const classes = useStyles();
-
-  const [listings, setListings] = useState([])
   
   const [newFind, setNewFind] = useState('')
+
+  const editListing = (id, listingObject) => {
+    listingService
+      .update(id, listingObject)
+      .then(returnedListing => {
+        setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
+      })
+  }
+
+  const deleteListing = (id) => {
+    listingService
+      .destroy(id)
+      .then(setListings(listings.filter(listing => {
+          return listing.id === id
+        }))
+      )
+  }
 
   const handleFindChange = (event) => {
     setNewFind(event.target.value)
   }
 
-  useEffect(() => {
-    listingService
-      .getAll()
-      .then(initialListings => {
-      setListings(initialListings)
-    })
-  }, [])
 
   const ListingsToShow = listings.filter(listing => {
-    return listing.module.includes(newFind)
+    return listing.module.toLowerCase().includes(newFind.toLowerCase().trim()) || listing.title.toLowerCase().includes(newFind.toLowerCase().trim())
   })
 
 
@@ -131,31 +147,64 @@ export default function PageListingsMC({user, logout, modules}) {
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
-        <Grid container spacing={3}>
-        <Grid item xs={12}>
-        <form>
-              <label>
-                <TextField
-                  className={classes.margin}
-                  id="input-with-icon-textfield"
-                  label="Module Code"
-                  value={newFind}
-                  onChange={handleFindChange}
-                  InputProps={{
-                  startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                   ),
-                  }}
-                />
-              </label>
-            </form>
+        <Router>
+            <Switch>
+              <Route path="/mymodules/editlisting">
+                <EditListing user={user} editListing={editListing} modules={modules} listingToEdit={listingToEdit} deleteListing={deleteListing} />
+              </Route>
+              <Route path="/listings/:moduleCode">
+                <ViewListingL user={user} listing={listingToEdit} setListingToEdit={setListingToEdit} />
+              </Route>
+              <Route path="/listings">
+                <Grid container spacing={3} alignItems="center">
+                  <Grid item xs={12}>
+                    <TextField
+                      className={classes.margin}
+                      id="input-with-icon-textfield"
+                      label="Module Code"
+                      value={newFind}
+                      onChange={handleFindChange}
+                      color="inherit"
+                      InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon />
+                        </InputAdornment>
+                        ),
+                      }}
+                    />
                   </Grid>
                   {ListingsToShow.map((listing, index) => (
-          <Listing key={index} listing={listing} />
-        ))}
+                    <Listing key={index} listing={listing} setListingToEdit={setListingToEdit} user={user} />
+                  ))}
                 </Grid>
+              </Route>
+              <Route path="/">
+              <Grid container spacing={3} alignItems="center">
+                  <Grid item xs={12}>
+                    <TextField
+                      className={classes.margin}
+                      id="input-with-icon-textfield"
+                      label="Module Code"
+                      value={newFind}
+                      onChange={handleFindChange}
+                      color="inherit"
+                      InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon />
+                        </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  {ListingsToShow.map((listing, index) => (
+                    <Listing key={index} listing={listing} setListingToEdit={setListingToEdit} user={user} />
+                  ))}
+                </Grid>
+              </Route>
+            </Switch>
+          </Router>
       </main>
     </div>
   );

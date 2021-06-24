@@ -67,10 +67,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function CreateNewListing({user, addListing, modules}) {
+export default function CreateNewListing({user, addListing, modules, initialModule}) {
   const classes = useStyles();
 
-  const [module, setModule] = useState('')
+  const [module, setModule] = useState(initialModule || '')
   const [title, setTitle] = useState('')
   const [acadYear, setAcadYear] = useState('')
   const [semester, setSemester] = useState('')
@@ -212,7 +212,7 @@ export default function CreateNewListing({user, addListing, modules}) {
             <Grid item xs={2}>
               <IconButton 
                 aria-label="delete"
-                href="/mymodules">
+                onClick={() => {window.history.back()}}>
                 <CloseIcon />
               </IconButton>
             </Grid>

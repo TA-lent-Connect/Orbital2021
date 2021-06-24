@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'
-import Module from '../components/Module'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -9,24 +8,17 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import { mainListItems } from '../components/StudentListItems';
-import PeopleIcon from '@material-ui/icons/People';
 import Logo from '../components/logo.png';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import Pagination from '@material-ui/lab/Pagination';
+import ModuleStudent from '../components/ModuleStudent'
+import ViewListingStudent from '../components/ViewListingStudent';
 
 
 const drawerWidth = 240;
@@ -37,6 +29,13 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+  },
+  taButton: {
+    marginRight: theme.spacing(2),
+  },
+  logoutButton: {
+    marginLeft: 'auto',
+    marginTop: theme.spacing(1),
   },
   drawer: {
     width: drawerWidth,
@@ -55,20 +54,34 @@ const useStyles = makeStyles((theme) => ({
     fixedHeight: {
     height: 240,
   },
+  margin: {
+    marginTop: theme.spacing(3),
+  },
 }));
 
-export default function PageModulesStudent({user, logout, modules}) {
+export default function PageModulesStudent({user, logout, modules, listings, listingToEdit, setListingToEdit}) {
   const classes = useStyles();
 
+  const [page, setPage] = useState(1)
   const [newFind, setNewFind] = useState('')
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
   const handleFindChange = (event) => {
     setNewFind(event.target.value)
   }
 
   const modulesToShow = modules.filter(module => {
-    return module.moduleCode.includes(newFind)
+    return module.moduleCode.toLowerCase().includes(newFind.toLowerCase().trim()) || module.title.toLowerCase().includes(newFind.toLowerCase().trim())
   })
+
+  const startArr = (page - 1) * 10
+  const endArr = (page) * 10
+
+  const modulesPerPage = modulesToShow.slice(startArr, endArr)
+
 
   return (
     <div className={classes.root}>
@@ -127,42 +140,71 @@ export default function PageModulesStudent({user, logout, modules}) {
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
-          <div>
-            <h1>Modules</h1>
-            <form>
-              <label>
-                <TextField
-                  className={classes.margin}
-                  id="input-with-icon-textfield"
-                  label="Module Code"
-                  value={newFind}
-                  onChange={handleFindChange}
-                  InputProps={{
-                  startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                   ),
-                  }}
-                />
-              </label>
-            </form>
-            {" "}
-            <div>
-            <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-             <Grid item xs={12} md={8} lg={9}>
-               {modulesToShow.map(module => 
-                <Module key={module.moduleCode} module={module} user={user}/>
-              )}
-             </Grid>
-             <Grid>
-             <Pagination count={601} color="primary" />
-             </Grid>
-           </Grid>
-         </Container>
-            </div>
-          </div>
+        <Router>
+            <Switch>
+              <Route path="/listings/:moduleCode">
+                <ViewListingStudent listing={listingToEdit} />
+              </Route>
+              <Route path="/modules">
+                <Grid container spacing={3} alignItems="center">
+                  <Grid item xs={12}>
+                    <TextField
+                      className={classes.margin}
+                      id="input-with-icon-textfield"
+                      label="Module Code"
+                      value={newFind}
+                      onChange={handleFindChange}
+                      color="inherit"
+                      InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon />
+                        </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={8}></Grid>
+                  <Grid item xs={4}>
+                    <Pagination count={parseInt((modulesToShow.length)/10) + 1} page={page} onChange={handlePageChange} color="primary"/>
+                  </Grid>
+                  {modulesPerPage.map(module => 
+                    <ModuleStudent key={module.moduleCode} module={module} listings={listings} setListingToEdit={setListingToEdit} />
+                  )}
+                  <Pagination count={parseInt((modulesToShow.length)/10) + 1} page={page} onChange={handlePageChange} color="primary"/>
+                </Grid>
+              </Route>
+              <Route path="/">
+                <Grid container spacing={3} alignItems="center">
+                  <Grid item xs={12}>
+                    <TextField
+                      className={classes.margin}
+                      id="input-with-icon-textfield"
+                      label="Module Code"
+                      value={newFind}
+                      onChange={handleFindChange}
+                      color="inherit"
+                      InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon />
+                        </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={8}></Grid>
+                  <Grid item xs={4}>
+                    <Pagination count={parseInt((modulesToShow.length)/10) + 1} page={page} onChange={handlePageChange} color="primary"/>
+                  </Grid>
+                  {modulesPerPage.map(module => 
+                    <ModuleStudent key={module.moduleCode} module={module} listings={listings} setListingToEdit={setListingToEdit} />
+                  )}
+                  <Pagination count={parseInt((modulesToShow.length)/10) + 1} page={page} onChange={handlePageChange} color="primary"/>
+                </Grid>
+              </Route>
+            </Switch>
+          </Router>
       </main>
     </div>
   );

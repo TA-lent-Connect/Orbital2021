@@ -11,7 +11,8 @@ import { useHistory } from 'react-router-dom';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 const useStyles = makeStyles({
   root: {
@@ -30,7 +31,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ViewListing = ({user, listing, setListingToEdit}) => {
+const ViewListingStudent = ({ user, listing, setListingToEdit }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -38,6 +39,8 @@ const ViewListing = ({user, listing, setListingToEdit}) => {
     history.push("/mymodules/editlisting");
     setListingToEdit(listing)
   }
+
+
 
   return listing !== undefined ? (
     <Grid container spacing={3}>
@@ -66,7 +69,7 @@ const ViewListing = ({user, listing, setListingToEdit}) => {
                 <Grid item xs={2}>
                   {user !== undefined && listing.user.username === user.username ? 
                   <IconButton variant="outlined" color="primary" onClick={handleEdit}>
-                    <EditIcon />
+                    <FavoriteIcon />
                   </IconButton> :
                   null}
                 </Grid>
@@ -115,4 +118,4 @@ const ViewListing = ({user, listing, setListingToEdit}) => {
   ) : null; // Or have some loading screen;
 };
 
-export default ViewListing;
+export default ViewListingStudent;

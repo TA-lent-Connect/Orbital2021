@@ -30,7 +30,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ViewListing = ({user, listing, setListingToEdit}) => {
+const ViewListingL = ({ user, listing, setListingToEdit }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -38,6 +38,8 @@ const ViewListing = ({user, listing, setListingToEdit}) => {
     history.push("/mymodules/editlisting");
     setListingToEdit(listing)
   }
+
+
 
   return listing !== undefined ? (
     <Grid container spacing={3}>
@@ -115,4 +117,4 @@ const ViewListing = ({user, listing, setListingToEdit}) => {
   ) : null; // Or have some loading screen;
 };
 
-export default ViewListing;
+export default ViewListingL;

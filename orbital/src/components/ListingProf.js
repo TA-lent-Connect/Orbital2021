@@ -33,13 +33,18 @@ const ListingProf = ({ listing, setListingToEdit, deleteListing}) => {
 
   const history = useHistory();
 
+  const viewListing = () => {
+    history.push(`/mymodules/${listing.module}`);
+    setListingToEdit(listing)
+  }
+
   return listing !== undefined ? (
     <Grid item xs={12} sm={6}>
       <Card className={classes.root}>
         <CardActionArea>
           <CardContent>
             <Grid container spacing={3}>
-              <Grid item xs={10}>
+              <Grid item xs={10} onClick={viewListing}>
                 <Typography className={classes.title} color="textSecondary" >
                   <br></br>
                   {listing.module}
@@ -49,10 +54,10 @@ const ListingProf = ({ listing, setListingToEdit, deleteListing}) => {
                 <ConfirmDeleteProf listing={listing} deleteListing={deleteListing}/>
               </Grid>
             </Grid>
-            <Typography variant="h6" component="h2">
+            <Typography variant="h6" component="h2" onClick={viewListing}>
               {listing.title}
             </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
+            <Typography variant="body2" color="textSecondary" component="p" onClick={viewListing}>
               <br></br>
               <br></br>
               AY {listing.acadYear} {listing.semester} <br></br>
