@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import axios from 'axios'
+import listingService from './services/listings'
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import PageLogin from './pages/PageLogin'
 import PageSignUp from './pages/PageSignUp'
@@ -52,6 +53,8 @@ const customTheme = createMuiTheme({
 const App = () => {
   const [user, setUser] = useState(null)
   const [modules, setModules] = useState([]);
+  const [listings, setListings] = useState([])
+  const [listingToEdit, setListingToEdit] = useState(null)
 
   useEffect(() => {
     axios
@@ -59,6 +62,14 @@ const App = () => {
       .then(response => {
         setModules(response.data)
       })
+  }, [])
+
+  useEffect(() => {
+    listingService
+      .getAll()
+      .then(initialListings => {
+      setListings(initialListings)
+    })
   }, [])
 
   const logout = () => {
@@ -95,19 +106,16 @@ const App = () => {
                       <PageApplications user={user} logout={logout} modules={modules} />
                     </Route>
                     <Route path="/listings">
-                      <PageListingsMC user={user} logout={logout} modules={modules} />
+                      <PageListingsMC user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
                     </Route>
                     <Route path="/modules">
-                      <PageModulesMC user={user} logout={logout} modules={modules} />
+                      <PageModulesMC user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit}  />
                     </Route>
-                    {/* <Route path="/modules/">
-                      <PageModulesModuleCode />
-                    </Route> */}
                     <Route path="/mymodules">
-                      <PageMyModules user={user} logout={logout} modules={modules} />
+                      <PageMyModules user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
                     </Route>
                     <Route path="/">
-                      <PageMyModules user={user} logout={logout} modules={modules}/>
+                      <PageMyModules user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
                     </Route>
                   </Switch>
                 </Router>
@@ -122,13 +130,10 @@ const App = () => {
                       <PageListingsStudent user={user} logout={logout} modules={modules} />
                     </Route>
                     <Route path="/modules">
-                      <PageModulesStudent user={user} logout={logout} modules={modules} />
+                      <PageModulesStudent user={user} logout={logout} modules={modules} listings={listings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
                     </Route>
-                    {/* <Route path="/modules/">
-                      <PageModulesModuleCode />
-                    </Route> */}
                     <Route path="/">
-                      <PageModulesStudent user={user} logout={logout} modules={modules}/>
+                      <PageListingsStudent user={user} logout={logout} modules={modules} />
                     </Route>
                   </Switch>
                 </Router>

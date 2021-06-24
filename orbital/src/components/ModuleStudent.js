@@ -1,16 +1,16 @@
 import React, { useState, useEffect} from 'react'
-import ListItem from '@material-ui/core/ListItem';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import listingService from '../services/listings'
 import Grid from '@material-ui/core/Grid';
-import FavoriteModule from '../components/FavoriteModule'
+import IconButton from '@material-ui/core/IconButton';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles({
   root: {
@@ -30,48 +30,50 @@ const useStyles = makeStyles({
 });
 
 
-const Module = ({ module, user}) => {
+const ModuleStudent = ({ module, listings, setListingToEdit}) => {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
+  const history = useHistory();
   const linktoNUSMods = `https://www.nusmods.com/modules/${module.moduleCode}`;
 
-//   const [listings, setListings] = useState([])
+  const viewModule = () => {
+    window.open(linktoNUSMods);
+  }
 
-// useEffect(() => {
-//   listingService
-//     .getAll()
-//     .then(initialListings => {
-//     setListings(initialListings)
-//   })
-// }, [])
+  const listingFound = listings.filter(listing => {
+    return listing.module === module.moduleCode
+  })
 
-// var listingExists = false;
-// for (listing in listings) {
-//   if ({module.moduleCode} === {listing.module}) {
-//     listingExists = true;
-//   }
-// }
+  const viewListing = () => {
+    history.push(`/listings/${listingFound[0].module}`);
+    setListingToEdit(listingFound[0])
+  }
 
   return (
-      <Grid item xs={12}>
+    <Grid item xs={12}>
       <Card className={classes.root}>
         <CardActionArea>
           <CardContent>
             <Grid container spacing={3}>
               <Grid item xs={10}>
-                <Typography className={classes.title} color="textSecondary" >
+                <Typography className={classes.title} color="primary" onClick={viewModule}>
                   <br></br>
                   {module.moduleCode}
                 </Typography>
               </Grid>
               <Grid item xs={2}>
-                <FavoriteModule module={module} user={user}/>
+                {listingFound.length === 1 ?
+                <IconButton variant="outlined" color="primary" onClick={viewListing}>
+                  <VisibilityIcon />
+                </IconButton> :
+                <IconButton variant="outlined" color="primary" >
+                  <VisibilityOffIcon />
+                </IconButton>}
               </Grid>
             </Grid>
-            <Typography variant="h6" component="h2">
+            <Typography variant="h6" component="h2" onClick={viewModule}>
               {module.title}
             </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
+            <Typography variant="body2" color="textSecondary" component="p" onClick={viewModule}>
               <br></br>
               <br></br>
               {module.description}
@@ -80,12 +82,17 @@ const Module = ({ module, user}) => {
         </CardActionArea>
         <CardActions>
         <Button size="small" href={linktoNUSMods} target="_blank" color="primary">
-    Learn More
+          Learn More
         </Button>
+        {listingFound.length === 1 ?
+          <Button size="small" onClick={viewListing} target="_blank" color="primary">
+            View Listing
+          </Button> :
+          null}
         </CardActions>
       </Card>
     </Grid>
 );
 }
 
-export default Module
+export default ModuleStudent

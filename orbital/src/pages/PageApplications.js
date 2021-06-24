@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   logoutButton: {
     marginLeft: 'auto',
+    marginTop: theme.spacing(1),
   },
   drawer: {
     width: drawerWidth,

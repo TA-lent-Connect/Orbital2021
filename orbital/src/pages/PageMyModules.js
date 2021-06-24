@@ -53,19 +53,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PageMyModules({user, logout, modules}) {
+export default function PageMyModules({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
   const classes = useStyles();
-
-  const [listings, setListings] = useState([])
-  const [listingToEdit, setListingToEdit] = useState(null)
-
-  useEffect(() => {
-    listingService
-      .getAll()
-      .then(initialListings => {
-      setListings(initialListings)
-    })
-  }, [])
 
   const addListing = (listingObject) => {
     listingService
@@ -93,7 +82,6 @@ export default function PageMyModules({user, logout, modules}) {
   }
 
 
-  
   const myListings = listings.filter(listing => {
     if (user !== undefined) {
       return listing.user.username === user.username;
@@ -110,7 +98,7 @@ export default function PageMyModules({user, logout, modules}) {
               <Grid item xs={5}>
                 <Typography variant="body2" noWrap>
                   <br></br>
-                  {user.name} | {user.accountType}
+                  {user !== undefined ? user.name : null} | {user !== undefined ? user.accountType : null}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
@@ -167,10 +155,10 @@ export default function PageMyModules({user, logout, modules}) {
                 <CreateNewListing user={user} addListing={addListing} modules={modules} />
               </Route>
               <Route path="/mymodules/:moduleCode">
-                <ViewListing listing={listingToEdit} />
+                <ViewListing user={user} listing={listingToEdit} setListingToEdit={setListingToEdit} />
               </Route>
               <Route path="/mymodules">
-                <Grid container spacing={3}>
+                <Grid container spacing={3} alignItems="center">
                   <Grid item xs={12}>
                     <NewListingButton />
                   </Grid>
@@ -180,7 +168,14 @@ export default function PageMyModules({user, logout, modules}) {
                 </Grid>
               </Route>
               <Route path="/">
-                <NewListingButton />
+                <Grid container spacing={3} alignItems="center">
+                  <Grid item xs={12}>
+                    <NewListingButton />
+                  </Grid>
+                    {myListings.map((listing, index) => (
+                      <ListingProf key={index} listing={listing} setListingToEdit={setListingToEdit} deleteListing={deleteListing} />
+                    ))}
+                </Grid>
               </Route>
             </Switch>
           </Router>
