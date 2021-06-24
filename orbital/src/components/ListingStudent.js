@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import listingService from '../services/listings'
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -9,6 +10,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { useHistory } from 'react-router-dom'
 import ConfirmDeleteProf from '../components/ConfirmDeleteProf'
+import IconButton from '@material-ui/core/IconButton';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 const useStyles = makeStyles({
   root: {
@@ -28,10 +32,41 @@ const useStyles = makeStyles({
   },
 });
 
-const ListingStudent = ({ listing}) => {
+const ListingStudent = ({ user, listing ,  setListingToEdit, listings, setListings}) => {
   const classes = useStyles();
 
   const history = useHistory();
+
+  const [sub, setSub] = useState(listing.subscribers.filter(sub => sub === user.username).length === 1)
+
+  const editListing = (id, listingObject) => {
+    listingService
+      .update(id, listingObject)
+      .then(returnedListing => {
+        setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
+      })
+  }
+
+
+  const handleSubChange = () => {
+    setSub(!sub)
+    console.log(sub)
+    console.log(user)
+    console.log(listing)
+    if (!sub) {
+      const changedSubscribers = listing.subscribers.concat(user.username)
+      console.log(changedSubscribers)
+      const changedListing = {...listing, subscribers: changedSubscribers}
+      editListing(listing.id, changedListing)
+    }
+    else {
+      const indexOfSub = listing.subscribers.indexOf(user.username)
+      const changedSubscribers = [...listing.subscribers.slice(0, indexOfSub), ...listing.subscribers.slice(indexOfSub + 1)]
+      console.log(changedSubscribers)
+      const changedListing = {...listing, subscribers: changedSubscribers}
+      editListing(listing.id, changedListing)
+    }
+  }
 
   return listing !== undefined ? (
     <Grid item xs={12} sm={6}>
@@ -44,6 +79,11 @@ const ListingStudent = ({ listing}) => {
                   <br></br>
                   {listing.module}
                 </Typography>
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton variant="outlined" color="primary" onClick={handleSubChange}>
+                  {sub ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                </IconButton>
               </Grid>
             </Grid>
             <Typography variant="h6" component="h2">
@@ -60,11 +100,13 @@ const ListingStudent = ({ listing}) => {
         <CardActions>
           <Button size="small" color="primary" button onClick= {() => {
             history.push(`/listings/${listing.module}`);
+            setListingToEdit(listing)
           }}>
             View Listing
           </Button>
           <Button size="small" color="primary" onClick= {() => {
             history.push(`/apply/${listing.module}`);
+            setListingToEdit(listing)
           }}>
             Apply
           </Button>

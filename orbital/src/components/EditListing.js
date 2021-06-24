@@ -83,6 +83,8 @@ export default function EditListing({user, editListing, modules, listingToEdit, 
   const [applicationProcess, setApplicationProcess] = useState(listingToEdit.applicationProcess)
   const [otherInfo, setOtherInfo] = useState(listingToEdit.otherInfo)
 
+  console.log(listingToEdit)
+
   const [moduleError, setModuleError] = useState(null);
   const [acadYearError, setAcadYearError] = useState(null);
   const [semesterError, setSemesterError] = useState(null);
@@ -189,7 +191,8 @@ export default function EditListing({user, editListing, modules, listingToEdit, 
       deadline: deadline,
       requirements: requirements,
       applicationProcess: applicationProcess,
-      otherInfo: otherInfo
+      otherInfo: otherInfo,
+      subscribers: listingToEdit.subscribers,
     }
     console.log(newListing)
     editListing(listingToEdit.id, newListing)
