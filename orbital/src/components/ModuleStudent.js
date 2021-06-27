@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { useHistory } from 'react-router-dom'
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles({
   root: {
@@ -61,13 +62,23 @@ const ModuleStudent = ({ module, listings, setListingToEdit}) => {
                 </Typography>
               </Grid>
               <Grid item xs={2}>
-                {listingFound.length === 1 ?
-                <IconButton variant="outlined" color="primary" onClick={viewListing}>
-                  <VisibilityIcon />
-                </IconButton> :
-                <IconButton variant="outlined" color="primary" >
-                  <VisibilityOffIcon />
-                </IconButton>}
+              {listingFound.length === 1 ? (
+                  <Tooltip title="View Listing">
+                    <IconButton
+                      variant="outlined"
+                      color="primary"
+                      onClick={viewListing}
+                    >
+                      <VisibilityIcon />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="No current listings for this module">
+                    <IconButton variant="outlined" color="primary">
+                      <VisibilityOffIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
               </Grid>
             </Grid>
             <Typography variant="h6" component="h2" onClick={viewModule}>

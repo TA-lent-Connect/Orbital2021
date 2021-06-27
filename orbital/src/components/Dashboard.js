@@ -25,7 +25,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://talentconnect.herokuapp.com/">
-        Your Website
+        TA-Lent Connect
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}

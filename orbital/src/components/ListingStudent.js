@@ -13,6 +13,7 @@ import ConfirmDeleteProf from '../components/ConfirmDeleteProf'
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles({
   root: {
@@ -68,6 +69,22 @@ const ListingStudent = ({ user, listing ,  setListingToEdit, listings, setListin
     }
   }
 
+  const Unsubscribe = (
+    <Tooltip title="Unsubscribe to listing">
+      <IconButton variant="outlined" color="primary" onClick={handleSubChange}>
+        <FavoriteIcon></FavoriteIcon>
+      </IconButton>
+    </Tooltip>
+  );
+
+  const Subscribe = (
+    <Tooltip title="Subscribe to listing">
+      <IconButton variant="outlined" color="primary" onClick={handleSubChange}>
+        <FavoriteBorderIcon></FavoriteBorderIcon>
+      </IconButton>
+    </Tooltip>
+  )
+
   return listing !== undefined ? (
     <Grid item xs={12} sm={6}>
       <Card className={classes.root}>
@@ -81,9 +98,10 @@ const ListingStudent = ({ user, listing ,  setListingToEdit, listings, setListin
                 </Typography>
               </Grid>
               <Grid item xs={2}>
-                <IconButton variant="outlined" color="primary" onClick={handleSubChange}>
+                {/* <IconButton variant="outlined" color="primary" onClick={handleSubChange}>
                   {sub ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                </IconButton>
+                </IconButton> */}
+                {sub ? Unsubscribe : Subscribe}
               </Grid>
             </Grid>
             <Typography variant="h6" component="h2">

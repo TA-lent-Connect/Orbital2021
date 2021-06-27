@@ -14,6 +14,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles({
   root: {
@@ -67,6 +68,22 @@ const ViewListingStudent = ({ user, listing , listings, setListings}) => {
     }
   }
 
+  const Unsubscribe = (
+    <Tooltip title="Unsubscribe to listing">
+      <IconButton variant="outlined" color="primary" onClick={handleSubChange}>
+        <FavoriteIcon></FavoriteIcon>
+      </IconButton>
+    </Tooltip>
+  );
+
+  const Subscribe = (
+    <Tooltip title="Subscribe to listing">
+      <IconButton variant="outlined" color="primary" onClick={handleSubChange}>
+        <FavoriteBorderIcon></FavoriteBorderIcon>
+      </IconButton>
+    </Tooltip>
+  )
+
 
   return listing !== undefined ? (
     <Grid container spacing={3}>
@@ -93,9 +110,10 @@ const ViewListingStudent = ({ user, listing , listings, setListings}) => {
                   </Typography>
                 </Grid>
                 <Grid item xs={2}>
-                  <IconButton variant="outlined" color="primary" onClick={handleSubChange}>
+                  {/* <IconButton variant="outlined" color="primary" onClick={handleSubChange}>
                     {sub ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                  </IconButton>
+                  </IconButton> */}
+                  {sub ? Unsubscribe : Subscribe}
                 </Grid>
               </Grid>
 
