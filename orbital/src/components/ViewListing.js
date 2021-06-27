@@ -12,6 +12,7 @@ import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles({
   root: {
@@ -48,9 +49,11 @@ const ViewListing = ({user, listing, setListingToEdit}) => {
           size="large"
           className={classes.button}
           startIcon={<KeyboardBackspaceIcon />}
-          onClick={() => {window.history.back()}}
+          onClick={() => {
+            window.history.back();
+          }}
         >
-          Back    
+          Back
         </Button>
       </Grid>
       <Grid item xs={12}>
@@ -59,16 +62,23 @@ const ViewListing = ({user, listing, setListingToEdit}) => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item xs={10}>
-                  <Typography variant="h6" color="primary" >
+                  <Typography variant="h6" color="primary">
                     {listing.module}
                   </Typography>
                 </Grid>
                 <Grid item xs={2}>
-                  {user !== undefined && listing.user.username === user.username ? 
-                  <IconButton variant="outlined" color="primary" onClick={handleEdit}>
-                    <EditIcon />
-                  </IconButton> :
-                  null}
+                  {user !== undefined &&
+                  listing.user.username === user.username ? (
+                    <Tooltip title="Edit Listing">
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        onClick={handleEdit}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </Tooltip>
+                  ) : null}
                 </Grid>
               </Grid>
 
@@ -91,7 +101,8 @@ const ViewListing = ({user, listing, setListingToEdit}) => {
                 Email: <br></br>
                 {listing.email} <br></br> <br></br>
                 Jobscope: <br></br>
-                {listing.jobScope} <br></br><br></br>
+                {listing.jobScope} <br></br>
+                <br></br>
                 Number Of Openings: <br></br>
                 {listing.numberOfOpenings} <br></br> <br></br>
                 Deadline: <br></br>

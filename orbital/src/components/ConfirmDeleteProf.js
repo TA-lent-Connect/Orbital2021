@@ -8,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { useHistory } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 export default function ConfirmDelete({listing, deleteListing}) {
@@ -32,19 +33,29 @@ export default function ConfirmDelete({listing, deleteListing}) {
 
   return (
     <div>
-      <IconButton variant="outlined" color="primary" onClick={handleClickOpen}>
-        <DeleteOutlineIcon />
-      </IconButton>
+      <Tooltip title="Delete Listing">
+        <IconButton
+          variant="outlined"
+          color="primary"
+          onClick={handleClickOpen}
+        >
+          <DeleteOutlineIcon />
+        </IconButton>
+      </Tooltip>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Confirm Deletion of {listing.module}?</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          Confirm Deletion of {listing.module}?
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            The listing would be permanently deleted from TA-lent Connect. Students would no longer be able to view or submit applications for this listing.
+            The listing would be permanently deleted from TA-lent Connect.
+            Students would no longer be able to view or submit applications for
+            this listing.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import users from '../services/users';
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 export default function FavoriteModule({module, user}) {
@@ -21,23 +22,46 @@ export default function FavoriteModule({module, user}) {
     //   } else {
     //       {user.favorites.push(module.moduleCode)};
     //   }
-      if (isFavorite === <FavoriteIcon></FavoriteIcon>) {
-          isFavorite = <FavoriteBorderIcon></FavoriteBorderIcon>;
-      } else {
-          isFavorite = <FavoriteIcon></FavoriteIcon>;
-      }
-      window.location.reload(false);
-      };
+    if (
+      isFavorite ===
+      (
+        <Tooltip title="Unsubscribe to Module">
+          <IconButton variant="outlined" color="primary" onClick={handleClick}>
+            <FavoriteIcon></FavoriteIcon>
+          </IconButton>
+        </Tooltip>
+      )
+    ) {
+      isFavorite = (
+        <Tooltip title="Subscribe to Module">
+          <IconButton variant="outlined" color="primary" onClick={handleClick}>
+            <FavoriteBorderIcon></FavoriteBorderIcon>
+          </IconButton>
+        </Tooltip>
+      );
+    } else {
+      isFavorite = (
+        <Tooltip title="Unsubscribe to Module">
+          <IconButton variant="outlined" color="primary" onClick={handleClick}>
+            <FavoriteIcon></FavoriteIcon>
+          </IconButton>
+        </Tooltip>
+      );
+    }
+    window.location.reload(false);
+  };
 
 //   const isFavorite = ({module.moduleCode} in {user.favorites});
-      var isFavorite = <FavoriteBorderIcon></FavoriteBorderIcon>;
+      var isFavorite = (
+        <Tooltip title="Subscribe to Module">
+          <IconButton variant="outlined" color="primary" onClick={handleClick}>
+            <FavoriteBorderIcon></FavoriteBorderIcon>
+          </IconButton>
+        </Tooltip>
+      );
   return (
     <div>
-      <IconButton variant="outlined" color="primary" 
-      onClick={handleClick}
-      >
       {isFavorite}
-      </IconButton>
     </div>
   );
 }

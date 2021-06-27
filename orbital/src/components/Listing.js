@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import { useHistory } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles({
   root: {
@@ -50,23 +51,35 @@ const Listing = ({ listing, setListingToEdit, user}) => {
           <CardContent>
             <Grid container spacing={3}>
               <Grid item xs={10} onClick={viewListing}>
-                <Typography className={classes.title} color="textSecondary" >
+                <Typography className={classes.title} color="textSecondary">
                   <br></br>
                   {listing.module}
                 </Typography>
               </Grid>
               <Grid item xs={2}>
-                {user !== undefined && listing.user.username === user.username ? 
-                <IconButton variant="outlined" color="primary" onClick={handleEdit}>
-                  <EditIcon />
-                </IconButton> :
-                null}
+                {user !== undefined &&
+                listing.user.username === user.username ? (
+                  <Tooltip title="Edit Listing">
+                    <IconButton
+                      variant="outlined"
+                      color="primary"
+                      onClick={handleEdit}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                ) : null}
               </Grid>
             </Grid>
             <Typography variant="h6" component="h2" onClick={viewListing}>
               {listing.title}
             </Typography>
-            <Typography variant="body2" color="textSecondary" component="p" onClick={viewListing}>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              component="p"
+              onClick={viewListing}
+            >
               <br></br>
               <br></br>
               AY {listing.acadYear} {listing.semester} <br></br>
@@ -75,10 +88,15 @@ const Listing = ({ listing, setListingToEdit, user}) => {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="primary" button onClick= {() => {
-            history.push(`/listings/${listing.module}`);
-            setListingToEdit(listing)
-          }}>
+          <Button
+            size="small"
+            color="primary"
+            button
+            onClick={() => {
+              history.push(`/listings/${listing.module}`);
+              setListingToEdit(listing);
+            }}
+          >
             View Listing
           </Button>
         </CardActions>

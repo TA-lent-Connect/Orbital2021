@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { useHistory } from 'react-router-dom'
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles({
   root: {
@@ -60,25 +61,44 @@ const ModuleProf = ({ module, listings, setListingToEdit}) => {
           <CardContent>
             <Grid container spacing={3}>
               <Grid item xs={10}>
-                <Typography className={classes.title} color="primary" onClick={viewModule}>
+                <Typography
+                  className={classes.title}
+                  color="primary"
+                  onClick={viewModule}
+                >
                   <br></br>
                   {module.moduleCode}
                 </Typography>
               </Grid>
               <Grid item xs={2}>
-                {listingFound.length === 1 ?
-                <IconButton variant="outlined" color="primary" onClick={viewListing}>
-                  <VisibilityIcon />
-                </IconButton> :
-                <IconButton variant="outlined" color="primary" >
-                  <VisibilityOffIcon />
-                </IconButton>}
+                {listingFound.length === 1 ? (
+                  <Tooltip title="View Listing">
+                    <IconButton
+                      variant="outlined"
+                      color="primary"
+                      onClick={viewListing}
+                    >
+                      <VisibilityIcon />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="No current listings for this module">
+                    <IconButton variant="outlined" color="primary">
+                      <VisibilityOffIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
               </Grid>
             </Grid>
             <Typography variant="h6" component="h2" onClick={viewModule}>
               {module.title}
             </Typography>
-            <Typography variant="body2" color="textSecondary" component="p" onClick={viewModule}>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              component="p"
+              onClick={viewModule}
+            >
               <br></br>
               <br></br>
               {module.description}
@@ -86,20 +106,37 @@ const ModuleProf = ({ module, listings, setListingToEdit}) => {
           </CardContent>
         </CardActionArea>
         <CardActions>
-        <Button size="small" href={linktoNUSMods} target="_blank" color="primary">
-          Learn More
-        </Button>
-        {listingFound.length === 1 ?
-          <Button size="small" onClick={viewListing} target="_blank" color="primary">
-            View Listing
-          </Button> :
-          <Button size="small" onClick={createListing} target="_blank" color="primary">
-            Create Listing
-          </Button>}
+          <Button
+            size="small"
+            href={linktoNUSMods}
+            target="_blank"
+            color="primary"
+          >
+            Learn More
+          </Button>
+          {listingFound.length === 1 ? (
+            <Button
+              size="small"
+              onClick={viewListing}
+              target="_blank"
+              color="primary"
+            >
+              View Listing
+            </Button>
+          ) : (
+            <Button
+              size="small"
+              onClick={createListing}
+              target="_blank"
+              color="primary"
+            >
+              Create Listing
+            </Button>
+          )}
         </CardActions>
       </Card>
     </Grid>
-);
+  );
 }
 
 export default ModuleProf
