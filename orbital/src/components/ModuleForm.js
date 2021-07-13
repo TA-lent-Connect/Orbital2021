@@ -39,7 +39,7 @@ export default function ModuleForm({user, module, setModule, moduleError, acadYe
             label="Module Code"
             value={module}
             onChange={handleModuleChange}
-            error={moduleError === "Module not found"}
+            error={moduleError === "Module not found" || moduleError === "Duplicate Listing exists for current academic year and semester"}
             helperText={moduleError}
           />
         </Grid>
@@ -53,13 +53,13 @@ export default function ModuleForm({user, module, setModule, moduleError, acadYe
             value={acadYear}
             onChange={handleAcadYearChange}
             select
-            error={acadYearError === "Please choose an academic year"}
+            error={acadYearError === "Please choose an academic year" || acadYearError === "Duplicate Listing exists for current academic year and semester"}
             helperText={acadYearError}
           >
-            <MenuItem value={"2020/2021"}>2020/2021</MenuItem>
             <MenuItem value={"2021/2022"}>2021/2022</MenuItem>
             <MenuItem value={"2022/2023"}>2022/2023</MenuItem>
             <MenuItem value={"2023/2024"}>2023/2024</MenuItem>
+            <MenuItem value={"2024/2025"}>2024/2025</MenuItem>
           </TextField>
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -72,7 +72,7 @@ export default function ModuleForm({user, module, setModule, moduleError, acadYe
             value={semester}
             onChange={handleSemesterChange}
             select
-            error={semesterError === "Please choose a semester"}
+            error={semesterError === "Please choose a semester" || semesterError === "Duplicate Listing exists for current academic year and semester"}
             helperText={semesterError}
           >
             <MenuItem value={"Semester 1"}>Semester 1</MenuItem>

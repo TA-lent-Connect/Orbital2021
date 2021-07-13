@@ -15,6 +15,7 @@ export default function NewListingButton() {
   return (
     <div>
       <Button
+        id="newListingButton"
         variant="contained"
         color="primary"
         size="large"

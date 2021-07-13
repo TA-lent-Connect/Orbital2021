@@ -13,6 +13,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
+import Disqus from "disqus-react"
 
 const useStyles = makeStyles({
   root: {
@@ -39,6 +40,13 @@ const ViewListing = ({user, listing, setListingToEdit}) => {
     history.push("/mymodules/editlisting");
     setListingToEdit(listing)
   }
+
+  const disqusShortname = "ta-lent-connect"
+    const disqusConfig = {
+      url: "https://talentconnect.herokuapp.com/",
+      identifier: listing.module,
+      title: "Discussion"
+    }
 
   return listing !== undefined ? (
     <Grid container spacing={3}>
@@ -121,6 +129,10 @@ const ViewListing = ({user, listing, setListingToEdit}) => {
           <CardActions>
           </CardActions>
         </Card>
+        <Disqus.DiscussionEmbed
+          shortname={disqusShortname}
+          config={disqusConfig}
+        />
       </Grid>
     </Grid>
   ) : null; // Or have some loading screen;
