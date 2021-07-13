@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function EditListing({user, editListing, modules, listingToEdit, deleteListing}) {
+export default function EditListing({user, editListing, modules, listingToEdit, deleteListing, listings}) {
   const classes = useStyles();
 
   const [module, setModule] = useState(listingToEdit.module)
@@ -135,7 +135,22 @@ export default function EditListing({user, editListing, modules, listingToEdit, 
       else {
         setEmailError("")
       }
-      if (moduleFound.length !== 0 && acadYear !== "" && semester !== "" && moduleCoordinator.trim() !== "" && email.trim() !== "") {
+      const listingFound = listings.filter(listings1 => {
+        return listings1.module === module.trim() && listings1.acadYear === acadYear && listings1.semester === semester 
+      })
+      console.log(listingFound[0])
+      console.log(listingToEdit)
+      if (listingFound.length !== 0 && listingFound[0] !== listingToEdit) {
+        setModuleError("Duplicate Listing exists for current academic year and semester")
+        setAcadYearError("Duplicate Listing exists for current academic year and semester")
+        setSemesterError("Duplicate Listing exists for current academic year and semester")
+      }
+      else {
+        setModuleError("")
+        setAcadYearError("")
+        setSemesterError("")
+      }
+      if (moduleFound.length !== 0 && acadYear !== "" && semester !== "" && moduleCoordinator.trim() !== "" && email.trim() !== "" && (listingFound.length === 0 || listingFound[0] === listingToEdit)) {
         setActiveStep(activeStep + 1);
       }
     }

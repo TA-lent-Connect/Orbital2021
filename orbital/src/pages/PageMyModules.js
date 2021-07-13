@@ -19,6 +19,9 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import EditListing from '../components/EditListing';
 import ViewListing from '../components/ViewListing';
+import Tooltip from '@material-ui/core/Tooltip';
+import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
+import HistoryIcon from '@material-ui/icons/History';
 
 
 const drawerWidth = 230;
@@ -56,6 +59,22 @@ const useStyles = makeStyles((theme) => ({
 export default function PageMyModules({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
   const classes = useStyles();
 
+  const [byAlpha, setByAlpha] = useState(false)
+
+  const toggleAlpha = () => {
+    setByAlpha(!byAlpha)
+  }
+
+  const alphaCompare = (l1, l2) => {
+    if (l1.module < l2.module) {
+      return -1;
+    }
+    else if (l1.module > l2.module) {
+      return 1;
+    }
+    return 0;
+  }
+
   const addListing = (listingObject) => {
     listingService
       .create(listingObject)
@@ -66,10 +85,26 @@ export default function PageMyModules({user, logout, modules, listings, setListi
 
   const editListing = (id, listingObject) => {
     listingService
-      .update(id, listingObject)
+      .destroy(id)
+      .then(setListings(listings.filter(listing => {
+          return listing.id === id
+        }))
+      )
+
+    console.log(listings)
+
+    listingService
+      .create(listingObject)
       .then(returnedListing => {
-        setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
+        setListings(listings.concat(returnedListing))
       })
+
+    // listingService
+    //   .update(id, listingObject)
+    //   .then(returnedListing => {
+    //     setListings(listings.filter(listing => {return listing.id === id}).concat(returnedListing))
+    //     //setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
+    //   })
   }
 
   const deleteListing = (id) => {
@@ -82,13 +117,18 @@ export default function PageMyModules({user, logout, modules, listings, setListi
   }
 
 
-  const myListings = listings.filter(listing => {
+  const myListings = byAlpha ? listings.filter(listing => {
     if (user !== undefined) {
       return listing.user.username === user.username;
     }
-  })
+  }).sort(alphaCompare) : listings.filter(listing => {
+    if (user !== undefined) {
+      return listing.user.username === user.username;
+    }
+  }).reverse() 
 
-  console.log(listings)
+  console.log(myListings)
+
 
 
   return (
@@ -151,18 +191,40 @@ export default function PageMyModules({user, logout, modules, listings, setListi
         <Router>
             <Switch>
               <Route path="/mymodules/editlisting">
-                <EditListing user={user} editListing={editListing} modules={modules} listingToEdit={listingToEdit} deleteListing={deleteListing} />
+                <EditListing user={user} editListing={editListing} modules={modules} listingToEdit={listingToEdit} deleteListing={deleteListing} listings={listings} />
               </Route>
               <Route path="/mymodules/createnewlisting">
-                <CreateNewListing user={user} addListing={addListing} modules={modules} />
+                <CreateNewListing user={user} addListing={addListing} modules={modules} listings={listings} />
               </Route>
               <Route path="/mymodules/:moduleCode">
                 <ViewListing user={user} listing={listingToEdit} setListingToEdit={setListingToEdit} />
               </Route>
               <Route path="/mymodules">
                 <Grid container spacing={3} alignItems="center">
-                  <Grid item xs={12}>
+                  <Grid item xs={10}>
                     <NewListingButton />
+                  </Grid>
+                  <Grid item xs={2}>
+                    {byAlpha ? (
+                      <Tooltip title="Sort by Newest">
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        onClick={toggleAlpha}
+                      >
+                        <HistoryIcon />
+                      </IconButton>
+                    </Tooltip> ) : (
+                      <Tooltip title="Sort by Alphabetical Order">
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        onClick={toggleAlpha}
+                      >
+                        <SortByAlphaIcon />
+                      </IconButton>
+                    </Tooltip>
+                    )}
                   </Grid>
                     {myListings.map((listing, index) => (
                       <ListingProf key={index} listing={listing} setListingToEdit={setListingToEdit} deleteListing={deleteListing} />

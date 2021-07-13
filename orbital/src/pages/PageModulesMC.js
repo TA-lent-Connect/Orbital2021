@@ -18,10 +18,11 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import Pagination from '@material-ui/lab/Pagination';
 import ModuleProf from '../components/ModuleProf'
-import ViewListingL from '../components/ViewListingL';
+import ViewListing from '../components/ViewListing';
 import CreateNewListing from '../components/CreateNewListing'
 import listingService from '../services/listings'
 import EditListing from '../components/EditListing';
+import Listing from '../components/Listing'
 
 
 const drawerWidth = 240;
@@ -66,7 +67,8 @@ export default function PageModulesMC({user, logout, modules, listings, setListi
   const classes = useStyles();
 
   const [page, setPage] = useState(1)
-  const [newFind, setNewFind] = useState('')
+  //const [newFind, setNewFind] = useState('')
+  const [newFind, setNewFind] = useState(listingToEdit ? listingToEdit.module : '')
 
   const addListing = (listingObject) => {
     listingService
@@ -78,10 +80,26 @@ export default function PageModulesMC({user, logout, modules, listings, setListi
 
   const editListing = (id, listingObject) => {
     listingService
-      .update(id, listingObject)
+      .destroy(id)
+      .then(setListings(listings.filter(listing => {
+          return listing.id === id
+        }))
+      )
+
+    console.log(listings)
+
+    listingService
+      .create(listingObject)
       .then(returnedListing => {
-        setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
+        setListings(listings.concat(returnedListing))
       })
+
+    // listingService
+    //   .update(id, listingObject)
+    //   .then(returnedListing => {
+    //     setListings(listings.filter(listing => {return listing.id === id}).concat(returnedListing))
+    //     //setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
+    //   })
   }
 
   const deleteListing = (id) => {
@@ -103,6 +121,10 @@ export default function PageModulesMC({user, logout, modules, listings, setListi
 
   const modulesToShow = modules.filter(module => {
     return module.moduleCode.toLowerCase().includes(newFind.toLowerCase().trim()) || module.title.toLowerCase().includes(newFind.toLowerCase().trim())
+  })
+
+  const ListingsToShow = listings.filter(listing => {
+    return listing.module.toLowerCase().includes(newFind.toLowerCase().trim()) || listing.title.toLowerCase().includes(newFind.toLowerCase().trim())
   })
 
   const startArr = (page - 1) * 10
@@ -171,13 +193,74 @@ export default function PageModulesMC({user, logout, modules, listings, setListi
         <Router>
             <Switch>
               <Route path="/mymodules/editlisting">
-                <EditListing user={user} editListing={editListing} modules={modules} listingToEdit={listingToEdit} deleteListing={deleteListing} />
+                <EditListing user={user} editListing={editListing} modules={modules} listingToEdit={listingToEdit} deleteListing={deleteListing} listings={listings} />
               </Route>
               <Route path="/mymodules/createnewlisting">
-                <CreateNewListing user={user} addListing={addListing} modules={modules} initialModule={listingToEdit} />
+                <CreateNewListing user={user} addListing={addListing} modules={modules} listings={listings} initialModule={listingToEdit} />
+              </Route>
+              <Route path="/listings">
+              <Router>
+                  <Switch>
+                    <Route path="/mymodules/editlisting">
+                      <EditListing user={user} editListing={editListing} modules={modules} listingToEdit={listingToEdit} deleteListing={deleteListing} listings={listings}/>
+                    </Route>
+                    <Route path="/listings/:moduleCode">
+                      <ViewListing user={user} listing={listingToEdit} setListingToEdit={setListingToEdit} />
+                    </Route>
+                    <Route path="/listings">
+                      <Grid container spacing={3} alignItems="center">
+                        <Grid item xs={12}>
+                          <TextField
+                            className={classes.margin}
+                            id="input-with-icon-textfield"
+                            label="Module Code"
+                            value={newFind}
+                            onChange={handleFindChange}
+                            color="inherit"
+                            InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <SearchIcon />
+                              </InputAdornment>
+                              ),
+                            }}
+                          />
+                        </Grid>
+                        {ListingsToShow.map((listing, index) => (
+                          <Listing key={index} listing={listing} setListingToEdit={setListingToEdit} user={user} />
+                        ))}
+                      </Grid>
+                    </Route>
+                    <Route path="/">
+                    <Grid container spacing={3} alignItems="center">
+                        <Grid item xs={12}>
+                          <TextField
+                            className={classes.margin}
+                            id="input-with-icon-textfield"
+                            label="Module Code"
+                            value={newFind}
+                            onChange={handleFindChange}
+                            color="inherit"
+                            InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <SearchIcon />
+                              </InputAdornment>
+                              ),
+                            }}
+                          />
+                        </Grid>
+                        {ListingsToShow.map((listing, index) => (
+                          <Listing key={index} listing={listing} setListingToEdit={setListingToEdit} user={user} />
+                        ))}
+                      </Grid>
+                    </Route>
+                  </Switch>
+                </Router>
+                {/* <PageListingsMC user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} /> */}
               </Route>
               <Route path="/listings/:moduleCode">
-                <ViewListingL user={user} listing={listingToEdit} setListingToEdit={setListingToEdit} />
+                <ViewListing user={user} listing={listingToEdit} setListingToEdit={setListingToEdit} />
               </Route>
               <Route path="/modules">
                 <Grid container spacing={3} alignItems="center">

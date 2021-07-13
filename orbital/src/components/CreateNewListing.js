@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function CreateNewListing({user, addListing, modules, initialModule}) {
+export default function CreateNewListing({user, addListing, modules, listings, initialModule}) {
   const classes = useStyles();
 
   const [module, setModule] = useState(initialModule || '')
@@ -132,7 +132,20 @@ export default function CreateNewListing({user, addListing, modules, initialModu
       else {
         setEmailError("")
       }
-      if (moduleFound.length !== 0 && acadYear !== "" && semester !== "" && moduleCoordinator.trim() !== "" && email.trim() !== "") {
+      const listingFound = listings.filter(listings1 => {
+        return listings1.module === module.trim() && listings1.acadYear === acadYear && listings1.semester === semester
+      })
+      if (listingFound.length !== 0) {
+        setModuleError("Duplicate Listing exists for current academic year and semester")
+        setAcadYearError("Duplicate Listing exists for current academic year and semester")
+        setSemesterError("Duplicate Listing exists for current academic year and semester")
+      }
+      else {
+        setModuleError("")
+        setAcadYearError("")
+        setSemesterError("")
+      }
+      if (moduleFound.length !== 0 && acadYear !== "" && semester !== "" && moduleCoordinator.trim() !== "" && email.trim() !== "" && listingFound.length === 0) {
         setActiveStep(activeStep + 1);
       }
     }
