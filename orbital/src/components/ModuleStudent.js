@@ -49,6 +49,11 @@ const ModuleStudent = ({ module, listings, setListingToEdit}) => {
     setListingToEdit(listingFound[0])
   }
 
+  const viewListings = () => {
+    history.push("/listings");
+    setListingToEdit(listingFound[0])
+  }
+
   return (
     <Grid item xs={12}>
       <Card className={classes.root}>
@@ -62,7 +67,8 @@ const ModuleStudent = ({ module, listings, setListingToEdit}) => {
                 </Typography>
               </Grid>
               <Grid item xs={2}>
-              {listingFound.length === 1 ? (
+              {listingFound.length >= 1 ? (
+                listingFound.length === 1 ? (
                   <Tooltip title="View Listing">
                     <IconButton
                       variant="outlined"
@@ -71,13 +77,19 @@ const ModuleStudent = ({ module, listings, setListingToEdit}) => {
                     >
                       <VisibilityIcon />
                     </IconButton>
-                  </Tooltip>
-                ) : (
-                  <Tooltip title="No current listings for this module">
-                    <IconButton variant="outlined" color="primary">
-                      <VisibilityOffIcon />
+                  </Tooltip> ) : (
+                    <Tooltip title="Multiple Listings">
+                    <IconButton
+                      variant="outlined"
+                      color="primary"
+                      onClick={viewListings}
+                    >
+                      <VisibilityIcon />
                     </IconButton>
                   </Tooltip>
+                  )
+                ) : (
+                  null
                 )}
               </Grid>
             </Grid>
@@ -95,10 +107,15 @@ const ModuleStudent = ({ module, listings, setListingToEdit}) => {
         <Button size="small" href={linktoNUSMods} target="_blank" color="primary">
           Learn More
         </Button>
-        {listingFound.length === 1 ?
+        {listingFound.length >= 1 ? 
+          listingFound.length === 1 ? (
           <Button size="small" onClick={viewListing} target="_blank" color="primary">
             View Listing
-          </Button> :
+          </Button> ) : (
+            <Button size="small" onClick={viewListings} target="_blank" color="primary">
+            View Listings
+          </Button>
+          ) :
           null}
         </CardActions>
       </Card>

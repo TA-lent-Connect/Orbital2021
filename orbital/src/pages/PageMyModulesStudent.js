@@ -16,6 +16,9 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ViewListingStudent from '../components/ViewListingStudent';
+import Tooltip from '@material-ui/core/Tooltip';
+import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
+import HistoryIcon from '@material-ui/icons/History';
 
 
 const drawerWidth = 230;
@@ -53,6 +56,22 @@ const useStyles = makeStyles((theme) => ({
 export default function PageMyModulesStudent({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
   const classes = useStyles();
 
+  const [byAlpha, setByAlpha] = useState(false)
+
+  const toggleAlpha = () => {
+    setByAlpha(!byAlpha)
+  }
+
+  const alphaCompare = (l1, l2) => {
+    if (l1.module < l2.module) {
+      return -1;
+    }
+    else if (l1.module > l2.module) {
+      return 1;
+    }
+    return 0;
+  }
+
   const addListing = (listingObject) => {
     listingService
       .create(listingObject)
@@ -78,12 +97,22 @@ export default function PageMyModulesStudent({user, logout, modules, listings, s
       )
   }
 
-
-  const myListings = listings.filter(listing => {
+  const myListings = byAlpha ? listings.filter(listing => {
     if (user !== undefined) {
       return (listing.subscribers.filter(sub => sub === user.username).length === 1)
     }
-  })
+  }).sort(alphaCompare) : listings.filter(listing => {
+    if (user !== undefined) {
+      return (listing.subscribers.filter(sub => sub === user.username).length === 1)
+    }
+  }).reverse() 
+
+
+  // const myListings = listings.filter(listing => {
+  //   if (user !== undefined) {
+  //     return (listing.subscribers.filter(sub => sub === user.username).length === 1)
+  //   }
+  // })
 
   console.log(listings)
 
@@ -152,6 +181,28 @@ export default function PageMyModulesStudent({user, logout, modules, listings, s
               </Route>
               <Route path="/mymodules">
                 <Grid container spacing={3} alignItems="center">
+                <Grid item xs={12}>
+                    {byAlpha ? (
+                      <Tooltip title="Sort by Newest">
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        onClick={toggleAlpha}
+                      >
+                        <HistoryIcon />
+                      </IconButton>
+                    </Tooltip> ) : (
+                      <Tooltip title="Sort by Alphabetical Order">
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        onClick={toggleAlpha}
+                      >
+                        <SortByAlphaIcon />
+                      </IconButton>
+                    </Tooltip>
+                    )}
+                  </Grid>
                     {myListings.map((listing, index) => (
                       <ListingStudent key={index} user={user} listing={listing} setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} />
                     ))}
@@ -159,6 +210,28 @@ export default function PageMyModulesStudent({user, logout, modules, listings, s
               </Route>
               <Route path="/">
                 <Grid container spacing={3} alignItems="center">
+                <Grid item xs={12}>
+                    {byAlpha ? (
+                      <Tooltip title="Sort by Newest">
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        onClick={toggleAlpha}
+                      >
+                        <HistoryIcon />
+                      </IconButton>
+                    </Tooltip> ) : (
+                      <Tooltip title="Sort by Alphabetical Order">
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        onClick={toggleAlpha}
+                      >
+                        <SortByAlphaIcon />
+                      </IconButton>
+                    </Tooltip>
+                    )}
+                  </Grid>
                     {myListings.map((listing, index) => (
                       <ListingStudent key={index} user={user} listing={listing} setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} />
                     ))}

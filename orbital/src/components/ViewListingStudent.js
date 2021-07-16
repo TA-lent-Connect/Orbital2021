@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import Tooltip from '@material-ui/core/Tooltip';
+import Disqus from "disqus-react"
 
 const useStyles = makeStyles({
   root: {
@@ -83,6 +84,13 @@ const ViewListingStudent = ({ user, listing , listings, setListings}) => {
       </IconButton>
     </Tooltip>
   )
+
+  const disqusShortname = "ta-lent-connect"
+    const disqusConfig = {
+      url: "https://talentconnect.herokuapp.com/",
+      identifier: listing.module,
+      title: "Discussion"
+    }
 
 
   return listing !== undefined ? (
@@ -155,6 +163,10 @@ const ViewListingStudent = ({ user, listing , listings, setListings}) => {
           <CardActions>
           </CardActions>
         </Card>
+        <Disqus.DiscussionEmbed
+          shortname={disqusShortname}
+          config={disqusConfig}
+        />
       </Grid>
     </Grid>
   ) : null; // Or have some loading screen;

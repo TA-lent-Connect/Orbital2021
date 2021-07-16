@@ -10,7 +10,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -39,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main,
   },
   form: {
     width: '100%',
@@ -103,8 +102,15 @@ const PageLogin = ({ setUser }) => {
       <ErrorAlert alert={alert} setAlert={setAlert} errorMessage={"Invalid Username or Password"} />
       <CssBaseline />
       <div className={classes.paper}>
+<<<<<<< HEAD
         <img src={Logo} />
         <Typography component="p" variant="h5">
+=======
+        <Avatar className={classes.avatar}>
+          <img src={Logo} />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+>>>>>>> 952fb4fa25f1996772bc3028e9a18ce957a206ec
           Sign in
         </Typography>
         <form className={classes.form} noValidate onSubmit={ handleLogin }>
@@ -127,9 +133,9 @@ const PageLogin = ({ setUser }) => {
             required
             fullWidth
             name="password"
+            id="password"
             label="Password"
             type="password"
-            id="password"
             autoComplete="current-password"
             value={password}
             onChange={handlePasswordChange}
@@ -139,6 +145,7 @@ const PageLogin = ({ setUser }) => {
             label="Remember me"
           />
           <Button
+            id="login-button"
             type="submit"
             fullWidth
             variant="contained"

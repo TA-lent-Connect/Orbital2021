@@ -17,9 +17,12 @@ import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import ViewListingL from '../components/ViewListingL';
+import ViewListing from '../components/ViewListing';
 import listingService from '../services/listings'
 import EditListing from '../components/EditListing';
+import Tooltip from '@material-ui/core/Tooltip';
+import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
+import HistoryIcon from '@material-ui/icons/History';
 
 
 const drawerWidth = 240;
@@ -61,14 +64,46 @@ const useStyles = makeStyles((theme) => ({
 export default function PageListingsMC({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
   const classes = useStyles();
   
-  const [newFind, setNewFind] = useState('')
+  const [newFind, setNewFind] = useState(listingToEdit ? listingToEdit.module : '')
+
+  const [byAlpha, setByAlpha] = useState(false)
+
+  const toggleAlpha = () => {
+    setByAlpha(!byAlpha)
+  }
+
+  const alphaCompare = (l1, l2) => {
+    if (l1.module < l2.module) {
+      return -1;
+    }
+    else if (l1.module > l2.module) {
+      return 1;
+    }
+    return 0;
+  }
 
   const editListing = (id, listingObject) => {
     listingService
-      .update(id, listingObject)
+      .destroy(id)
+      .then(setListings(listings.filter(listing => {
+          return listing.id === id
+        }))
+      )
+
+    console.log(listings)
+
+    listingService
+      .create(listingObject)
       .then(returnedListing => {
-        setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
+        setListings(listings.concat(returnedListing))
       })
+
+    // listingService
+    //   .update(id, listingObject)
+    //   .then(returnedListing => {
+    //     setListings(listings.filter(listing => {return listing.id === id}).concat(returnedListing))
+    //     //setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
+    //   })
   }
 
   const deleteListing = (id) => {
@@ -84,10 +119,16 @@ export default function PageListingsMC({user, logout, modules, listings, setList
     setNewFind(event.target.value)
   }
 
-
-  const ListingsToShow = listings.filter(listing => {
+  const ListingsToShow = byAlpha ? listings.filter(listing => {
     return listing.module.toLowerCase().includes(newFind.toLowerCase().trim()) || listing.title.toLowerCase().includes(newFind.toLowerCase().trim())
-  })
+  }).sort(alphaCompare) : listings.filter(listing => {
+    return listing.module.toLowerCase().includes(newFind.toLowerCase().trim()) || listing.title.toLowerCase().includes(newFind.toLowerCase().trim())
+  }).reverse() 
+
+
+  // const ListingsToShow = listings.filter(listing => {
+  //   return listing.module.toLowerCase().includes(newFind.toLowerCase().trim()) || listing.title.toLowerCase().includes(newFind.toLowerCase().trim())
+  // }).reverse()
 
 
   return (
@@ -150,14 +191,14 @@ export default function PageListingsMC({user, logout, modules, listings, setList
         <Router>
             <Switch>
               <Route path="/mymodules/editlisting">
-                <EditListing user={user} editListing={editListing} modules={modules} listingToEdit={listingToEdit} deleteListing={deleteListing} />
+                <EditListing user={user} editListing={editListing} modules={modules} listingToEdit={listingToEdit} deleteListing={deleteListing} listings={listings} />
               </Route>
               <Route path="/listings/:moduleCode">
-                <ViewListingL user={user} listing={listingToEdit} setListingToEdit={setListingToEdit} />
+                <ViewListing user={user} listing={listingToEdit} setListingToEdit={setListingToEdit} />
               </Route>
               <Route path="/listings">
                 <Grid container spacing={3} alignItems="center">
-                  <Grid item xs={12}>
+                  <Grid item xs={10}>
                     <TextField
                       className={classes.margin}
                       id="input-with-icon-textfield"
@@ -174,6 +215,28 @@ export default function PageListingsMC({user, logout, modules, listings, setList
                       }}
                     />
                   </Grid>
+                  <Grid item xs={2}>
+                    {byAlpha ? (
+                      <Tooltip title="Sort by Newest">
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        onClick={toggleAlpha}
+                      >
+                        <HistoryIcon />
+                      </IconButton>
+                    </Tooltip> ) : (
+                      <Tooltip title="Sort by Alphabetical Order">
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        onClick={toggleAlpha}
+                      >
+                        <SortByAlphaIcon />
+                      </IconButton>
+                    </Tooltip>
+                    )}
+                  </Grid>
                   {ListingsToShow.map((listing, index) => (
                     <Listing key={index} listing={listing} setListingToEdit={setListingToEdit} user={user} />
                   ))}
@@ -181,7 +244,7 @@ export default function PageListingsMC({user, logout, modules, listings, setList
               </Route>
               <Route path="/">
               <Grid container spacing={3} alignItems="center">
-                  <Grid item xs={12}>
+                  <Grid item xs={10}>
                     <TextField
                       className={classes.margin}
                       id="input-with-icon-textfield"
@@ -197,6 +260,28 @@ export default function PageListingsMC({user, logout, modules, listings, setList
                         ),
                       }}
                     />
+                  </Grid>
+                  <Grid item xs={2}>
+                    {byAlpha ? (
+                      <Tooltip title="Sort by Newest">
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        onClick={toggleAlpha}
+                      >
+                        <HistoryIcon />
+                      </IconButton>
+                    </Tooltip> ) : (
+                      <Tooltip title="Sort by Alphabetical Order">
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        onClick={toggleAlpha}
+                      >
+                        <SortByAlphaIcon />
+                      </IconButton>
+                    </Tooltip>
+                    )}
                   </Grid>
                   {ListingsToShow.map((listing, index) => (
                     <Listing key={index} listing={listing} setListingToEdit={setListingToEdit} user={user} />

@@ -49,6 +49,11 @@ const ModuleProf = ({ module, listings, setListingToEdit}) => {
     setListingToEdit(listingFound[0])
   }
 
+  const viewListings = () => {
+    history.push("/listings");
+    setListingToEdit(listingFound[0])
+  }
+
   const createListing = () => {
     history.push("/mymodules/createnewlisting");
     setListingToEdit(module.moduleCode)
@@ -71,22 +76,29 @@ const ModuleProf = ({ module, listings, setListingToEdit}) => {
                 </Typography>
               </Grid>
               <Grid item xs={2}>
-                {listingFound.length === 1 ? (
-                  <Tooltip title="View Listing">
-                    <IconButton
-                      variant="outlined"
-                      color="primary"
-                      onClick={viewListing}
-                    >
-                      <VisibilityIcon />
-                    </IconButton>
-                  </Tooltip>
+                {listingFound.length >= 1 ? (
+                  listingFound.length === 1 ? (
+                    <Tooltip title="View Listing">
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        onClick={viewListing}
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
+                    </Tooltip> ) : (
+                      <Tooltip title="Multiple Listings">
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        onClick={viewListings}
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
+                    </Tooltip>
+                    )                 
                 ) : (
-                  <Tooltip title="No current listings for this module">
-                    <IconButton variant="outlined" color="primary">
-                      <VisibilityOffIcon />
-                    </IconButton>
-                  </Tooltip>
+                  null
                 )}
               </Grid>
             </Grid>
@@ -114,15 +126,25 @@ const ModuleProf = ({ module, listings, setListingToEdit}) => {
           >
             Learn More
           </Button>
-          {listingFound.length === 1 ? (
-            <Button
-              size="small"
-              onClick={viewListing}
-              target="_blank"
-              color="primary"
-            >
-              View Listing
-            </Button>
+          {listingFound.length >= 1 ? (
+            listingFound.length === 1 ? (
+              <Button
+                size="small"
+                onClick={viewListing}
+                target="_blank"
+                color="primary"
+              >
+                View Listing
+              </Button> ) : (
+                <Button
+                size="small"
+                onClick={viewListings}
+                target="_blank"
+                color="primary"
+              >
+                View Listings
+              </Button>
+              )
           ) : (
             <Button
               size="small"
