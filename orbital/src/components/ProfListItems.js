@@ -12,10 +12,28 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import SettingsIcon from '@material-ui/icons/Settings';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import AppsIcon from '@material-ui/icons/Apps';
+import { makeStyles } from '@material-ui/core/styles';
+
+
+// const useStyles = makeStyles({
+//   root: {
+//     '&$selected': {
+//       backgroundColor: 'orange',
+//       '&:hover': {
+//         backgroundColor: 'orange',
+//       }
+//     },
+//   },
+//   selected: {},
+// });
+
+
 
 export const mainListItems = (
   <div>
-    <ListItem button onClick= {() => {
+    <ListItem 
+    selected={window.history.state === "ApplicationsLandingPage"}
+    button onClick= {() => {
       window.history.pushState("ApplicationsLandingPage","ApplicationsLandingPage", "/applications");
       window.location.reload(false);
     }}>
@@ -24,7 +42,8 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Applications" />
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem selected={window.history.state === "MyModulesLandingPage"}
+    button onClick= {() => {
       window.history.pushState("MyModulesLandingPage","MyModulesLandingPage", "/mymodules");
       window.location.reload(false);
     }}>
@@ -33,7 +52,8 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="MyModules" />
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem selected={window.history.state === "ListingsLandingPage" || window.history.state === "ModuleCoordinatorLandingPage"}
+    button onClick= {() => {
       window.history.pushState("ListingsLandingPage","ListingsLandingPage", "/listings");
       window.location.reload(false);
     }}>
@@ -42,7 +62,8 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Listings" />
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem selected={window.history.state === "ModulesLandingPage"}
+    button onClick= {() => {
       window.history.pushState("ModulesLandingPage","ModulesLandingPage", "/modules");
       window.location.reload(false);
     }}>
@@ -51,7 +72,11 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Modules" />
     </ListItem>
-    <ListItem button>
+    <ListItem selected={window.history.state === "SettingsLandingPage"}
+    button onClick= {() => {
+      window.history.pushState("SettingsLandingPage","SettingsLandingPage", "/settings");
+      window.location.reload(false);
+    }}>
       <ListItemIcon>
         <SettingsIcon />
       </ListItemIcon>

@@ -67,6 +67,7 @@ const ListingStudent = ({ user, listing ,  setListingToEdit, listings, setListin
       const changedListing = {...listing, subscribers: changedSubscribers}
       editListing(listing.id, changedListing)
     }
+    window.location.reload(false);
   }
 
   const Unsubscribe = (

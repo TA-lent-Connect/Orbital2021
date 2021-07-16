@@ -14,7 +14,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import ErrorAlert from '../components/ErrorAlert'
+import ErrorAlert from '../components/ErrorAlert';
+import Logo from '../components/loginlogo.png';
 
 function Copyright() {
   return (
@@ -102,10 +103,8 @@ const PageLogin = ({ setUser }) => {
       <ErrorAlert alert={alert} setAlert={setAlert} errorMessage={"Invalid Username or Password"} />
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
+        <img src={Logo} />
+        <Typography component="p" variant="h5">
           Sign in
         </Typography>
         <form className={classes.form} noValidate onSubmit={ handleLogin }>

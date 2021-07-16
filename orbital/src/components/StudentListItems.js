@@ -10,7 +10,8 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 
 export const mainListItems = (
   <div>
-    <ListItem button onClick= {() => {
+    <ListItem selected={window.history.state === "ApplyLandingPage"}
+    button onClick= {() => {
       window.history.pushState("ApplyLandingPage","ApplyLandingPage", "/apply");
       window.location.reload(false);
     }}>
@@ -19,7 +20,8 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Apply" />
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem selected={window.history.state === "MyModulesLandingPage"}
+    button onClick= {() => {
       window.history.pushState("MyModulesLandingPage","MyModulesLandingPage", "/mymodules");
       window.location.reload(false);
     }}>
@@ -28,7 +30,8 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="MyModules" />
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem selected={window.history.state === "ListingsLandingPage" || window.history.state === "StudentLandingPage"}
+    button onClick= {() => {
       window.history.pushState("ListingsLandingPage","ListingsLandingPage", "/listings");
       window.location.reload(false);
     }}>
@@ -37,7 +40,8 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Listings" />
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem selected={window.history.state === "ModulesLandingPage"}
+    button onClick= {() => {
       window.history.pushState("ModulesLandingPage","ModulesLandingPage", "/modules");
       window.location.reload(false);
     }}>
@@ -46,7 +50,8 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Modules" />
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem selected={window.history.state === "SettingsLandingPage"}
+    button onClick= {() => {
       window.history.pushState("SettingsLandingPage","SettingsLandingPage", "/settings");
       window.location.reload(false);
     }}>

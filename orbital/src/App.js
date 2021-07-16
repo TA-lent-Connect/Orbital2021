@@ -104,7 +104,7 @@ const App = () => {
                 <Router>
                   <Switch>
                     <Route path="/applications">
-                      <PageApplications user={user} logout={logout} modules={modules} />
+                      <PageApplications user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit}/>
                     </Route>
                     <Route path="/listings">
                       <PageListingsMC user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
