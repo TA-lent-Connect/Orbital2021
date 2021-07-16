@@ -167,13 +167,7 @@ const SignUp = () => {
       <SuccessAlert alert={successAlert} setAlert={setSuccessAlert} successMessage={"User Successfully Created"} />
       <CssBaseline />
       <div className={classes.paper}>
-<<<<<<< HEAD
       <img src={Logo} />
-=======
-        <Avatar className={classes.avatar}>
-          <img src={Logo} />
-        </Avatar>
->>>>>>> 952fb4fa25f1996772bc3028e9a18ce957a206ec
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>

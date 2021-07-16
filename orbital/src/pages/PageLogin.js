@@ -102,15 +102,8 @@ const PageLogin = ({ setUser }) => {
       <ErrorAlert alert={alert} setAlert={setAlert} errorMessage={"Invalid Username or Password"} />
       <CssBaseline />
       <div className={classes.paper}>
-<<<<<<< HEAD
         <img src={Logo} />
         <Typography component="p" variant="h5">
-=======
-        <Avatar className={classes.avatar}>
-          <img src={Logo} />
-        </Avatar>
-        <Typography component="h1" variant="h5">
->>>>>>> 952fb4fa25f1996772bc3028e9a18ce957a206ec
           Sign in
         </Typography>
         <form className={classes.form} noValidate onSubmit={ handleLogin }>
