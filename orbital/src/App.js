@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import axios from 'axios'
 import listingService from './services/listings'
+import applicationService from './services/applications'
+import uploadService from './services/uploads'
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import PageLogin from './pages/PageLogin'
 import PageSignUp from './pages/PageSignUp'
@@ -56,6 +58,8 @@ const App = () => {
   const [modules, setModules] = useState([]);
   const [listings, setListings] = useState([])
   const [listingToEdit, setListingToEdit] = useState(null)
+  const [applications, setApplications] = useState([])
+  const [uploads, setUploads] = useState([])
 
   useEffect(() => {
     axios
@@ -72,6 +76,24 @@ const App = () => {
       setListings(initialListings)
     })
   }, [])
+
+  useEffect(() => {
+    applicationService
+      .getAll()
+      .then(initialApplications => {
+      setApplications(initialApplications)
+    })
+  }, [])
+
+  useEffect(() => {
+    uploadService
+      .getAll()
+      .then(initialUploads => {
+      setUploads(initialUploads)
+    })
+  }, [])
+
+  console.log(uploads)
 
   const logout = () => {
     window.localStorage.removeItem('loggedUser')
@@ -104,16 +126,16 @@ const App = () => {
                 <Router>
                   <Switch>
                     <Route path="/applications">
-                      <PageApplications user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit}/>
+                      <PageApplications user={user} logout={logout} listings={listings} applications={applications} uploads={uploads} setUploads={setUploads}/>
                     </Route>
                     <Route path="/listings">
-                      <PageListingsMC user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
+                      <PageListingsMC user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} uploads={uploads} setUploads={setUploads} />
                     </Route>
                     <Route path="/modules">
                       <PageModulesMC user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit}  />
                     </Route>
                     <Route path="/mymodules">
-                      <PageMyModules user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
+                      <PageMyModules user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} uploads={uploads} setUploads={setUploads} />
                     </Route>
                     <Route path="/">
                       <PageMyModules user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
@@ -125,16 +147,16 @@ const App = () => {
               <Router>
                   <Switch>
                     <Route path="/apply">
-                      <PageApply user={user} logout={logout} modules={modules} />
+                      <PageApply user={user} setUser={setUser} logout={logout} modules={modules} listings={listings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} applications={applications} setApplications={setApplications}/>
                     </Route>
                     <Route path="/listings">
-                      <PageListingsStudent user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
+                      <PageListingsStudent user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} applications={applications} setApplications={setApplications}/>
                     </Route>
                     <Route path="/modules">
-                      <PageModulesStudent user={user} setUser={setUser} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
+                      <PageModulesStudent user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
                     </Route>
                     <Route path="/mymodules">
-                      <PageMyModulesStudent user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />
+                      <PageMyModulesStudent user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} applications={applications} setApplications={setApplications}/>
                     </Route>
                     <Route path="/">
                       <PageListingsStudent user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} />

@@ -8,9 +8,8 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
-import ModuleForm from './ModuleForm';
-import ApplicationForm from './ApplicationForm';
-import AttachmentForm from './AttachmentForm';
+import ApplicationDetailsForm from './ApplicationDetailsForm';
+import ApplicationAttachmentForm from './ApplicationAttachmentForm';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Grid from '@material-ui/core/Grid';
@@ -67,24 +66,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function CreateNewListing({user, addListing, modules, initialModule}) {
+export default function CreateNewApplication({user, addApplication, modules, initialModule}) {
   const classes = useStyles();
 
-  const [module, setModule] = useState(initialModule || '')
+  const [module, setModule] = useState((initialModule !== undefined) ? initialModule.module : '')
   const [title, setTitle] = useState('')
-  const [acadYear, setAcadYear] = useState('')
-  const [semester, setSemester] = useState('')
-  const [moduleCoordinator, setModuleCoordinator] = useState(user.name)
+  const [acadYear, setAcadYear] = useState((initialModule !== undefined) ? initialModule.acadYear : '')
+  const [semester, setSemester] = useState((initialModule !== undefined) ? initialModule.semester : '')
+  const [name, setName] = useState(user.name)
   const [email, setEmail] = useState(user.email)
+  const [otherInfo, setOtherInfo] = useState('')
+  const [major, setMajor] = useState('')
+  const [studyYear, setStudyYear] = useState('')
+  const [fileName, setFileName] = useState('')
 
   const [moduleError, setModuleError] = useState(null);
   const [acadYearError, setAcadYearError] = useState(null);
   const [semesterError, setSemesterError] = useState(null);
-  const [moduleCoordinatorError, setModuleCoordinatorError] = useState(null);
+  const [nameError, setNameError] = useState(null);
   const [emailError, setEmailError] = useState(null);
+  const [majorError, setMajorError] = useState(null);
+  const [studyYearError, setStudyYearError] = useState(null);
 
-  const [numberOfOpeningsError, setNumberOfOpeningsError] = useState(null);
-  const [deadlineError, setDeadlineError] = useState(null);
 
 
   const [activeStep, setActiveStep] = React.useState(0);
@@ -108,17 +111,29 @@ export default function CreateNewListing({user, addListing, modules, initialModu
       else {
         setAcadYearError("")
       }
+      if (studyYear === "") {
+        setStudyYearError("Please select your year of study")
+      }
+      else {
+        setAcadYearError("")
+      }
+      if (major === "") {
+        setMajorError("Please choose your major")
+      }
+      else {
+        setMajorError("")
+      }
       if (semester === "") {
         setSemesterError("Please choose a semester")
       }
       else {
         setSemesterError("")
       }
-      if (moduleCoordinator.trim() === "") {
-        setModuleCoordinatorError("Please enter your name")
+      if (name.trim() === "") {
+        setNameError("Please enter your name")
       }
       else {
-        setModuleCoordinatorError("")
+        setNameError("")
       }
       if (email.trim() === "") {
         setEmailError("Please enter your email")
@@ -126,24 +141,7 @@ export default function CreateNewListing({user, addListing, modules, initialModu
       else {
         setEmailError("")
       }
-      if (moduleFound.length !== 0 && acadYear !== "" && semester !== "" && moduleCoordinator.trim() !== "" && email.trim() !== "") {
-        setActiveStep(activeStep + 1);
-      }
-    }
-    else if (activeStep === 1) {
-      if (numberOfOpenings.trim() === "" || isNaN(parseInt(numberOfOpenings))) {
-        setNumberOfOpeningsError("Please input a valid number")
-      }
-      else {
-        setNumberOfOpeningsError("")
-      }
-      if (deadline.trim() === "") {
-        setDeadlineError("Please choose a deadline")
-      }
-      else {
-        setDeadlineError("")
-      }
-      if (numberOfOpenings.trim() !== "" && !isNaN(parseInt(numberOfOpenings)) && deadline.trim() !== "") {
+      if (moduleFound.length !== 0 && acadYear !== "" && semester !== "" && name.trim() !== "" && email.trim() !== "" && major.trim() !== "" && studyYear.trim() !== "") {
         setActiveStep(activeStep + 1);
       }
     }
@@ -153,16 +151,14 @@ export default function CreateNewListing({user, addListing, modules, initialModu
     setActiveStep(activeStep - 1);
   };
 
-  const steps = ['Module Information', 'Application Details', 'Attachments'];
+  const steps = ['Application Details', 'Attachments'];
 
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <ModuleForm user={user} module={module} setModule={setModule} moduleError={moduleError} acadYear={acadYear} setAcadYear={setAcadYear} acadYearError={acadYearError} semester={semester} setSemester={setSemester} semesterError={semesterError} moduleCoordinator={moduleCoordinator} setModuleCoordinator={setModuleCoordinator} moduleCoordinatorError={moduleCoordinatorError} email={email} setEmail={setEmail} emailError={emailError} jobScope={jobScope} setJobScope={setJobScope} />;
+        return <ApplicationDetailsForm user={user} module={module} setModule={setModule} moduleError={moduleError} acadYear={acadYear} setAcadYear={setAcadYear} acadYearError={acadYearError} semester={semester} setSemester={setSemester} semesterError={semesterError} name={name} setName={setName} nameError={nameError} email={email} setEmail={setEmail} emailError={emailError} major={major} setMajor={setMajor} majorError={majorError} studyYear={studyYear} setStudyYear={setStudyYear} studyYearError={studyYearError}/>;
       case 1:
-        return <ApplicationForm numberOfOpenings={numberOfOpenings} setNumberOfOpenings={setNumberOfOpenings} numberOfOpeningsError={numberOfOpeningsError} deadline={deadline} setDeadline={setDeadline} deadlineError={deadlineError} requirements={requirements} setRequirements={setRequirements} applicationProcess={applicationProcess} setApplicationProcess={setApplicationProcess} />;
-      case 2:
-        return <AttachmentForm otherInfo={otherInfo} setOtherInfo={setOtherInfo} />;
+        return <ApplicationAttachmentForm otherInfo={otherInfo} setOtherInfo={setOtherInfo} fileName={fileName} setFileName={setFileName}/>;
       default:
         throw new Error('Unknown step');
     }
@@ -175,8 +171,12 @@ export default function CreateNewListing({user, addListing, modules, initialModu
       title: title,
       acadYear: acadYear,
       semester: semester,
-      moduleCoordinator: moduleCoordinator,
+      name: name,
       email: email,
+      major: major,
+      studyYear: studyYear,
+      otherInfo: otherInfo,
+      fileName: fileName,
     }
     console.log(newApplication)
     addApplication(newApplication)
@@ -194,7 +194,7 @@ export default function CreateNewListing({user, addListing, modules, initialModu
             </Grid>
             <Grid item xs={8}>
               <Typography component="h2" variant="h6" align="center" color="primary">
-                New Listing
+                New Application
               </Typography> 	
             </Grid>
             <Grid item xs={2}>
@@ -229,9 +229,9 @@ export default function CreateNewListing({user, addListing, modules, initialModu
                     variant="contained"
                     color="primary"
                     className={classes.button}
-                    href="/mymodules"
+                    href="/apply"
                   >
-                    Back to MyModules
+                    Back to Apply
                   </Button>
               </React.Fragment>
             ) : (

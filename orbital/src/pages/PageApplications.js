@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -9,7 +9,6 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import { mainListItems } from '../components/ProfListItems';
 import ListingApplications from '../components/ListingApplications'
-import listingService from '../services/listings'
 import Logo from '../components/logo.png';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Grid from '@material-ui/core/Grid';
@@ -50,26 +49,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PageApplications({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
+export default function PageApplications({user, logout, listings, applications}) {
   const classes = useStyles();
-
-  const deleteListing = (id) => {
-    listingService
-      .destroy(id)
-      .then(setListings(listings.filter(listing => {
-          return listing.id === id
-        }))
-      )
-  }
-
+  const [applicationToView, setApplicationToView] = useState(null)
 
   const myListings = listings.filter(listing => {
     if (user !== undefined) {
       return listing.user.username === user.username;
     }
   })
-
-  console.log(listings)
 
 
   return (
@@ -132,19 +120,19 @@ export default function PageApplications({user, logout, modules, listings, setLi
         <Router>
             <Switch>
               <Route path="/applications/:moduleCode">
-                <ViewApplications user={user} listing={listingToEdit} setListingToEdit={setListingToEdit} />
+                <ViewApplications listingToEdit={applicationToView} applications={applications} />
               </Route>
               <Route path="/applications">
                 <Grid container spacing={3} alignItems="center">
                     {myListings.map((listing, index) => (
-                      <ListingApplications key={index} listing={listing} setListingToEdit={setListingToEdit} deleteListing={deleteListing} />
+                      <ListingApplications key={index} listing={listing} setListingToEdit={setApplicationToView} />
                     ))}
                 </Grid>
               </Route>
               <Route path="/">
-                <Grid container spacing={3} alignItems="center">
+              <Grid container spacing={3} alignItems="center">
                     {myListings.map((listing, index) => (
-                      <ListingApplications key={index} listing={listing} setListingToEdit={setListingToEdit} deleteListing={deleteListing} />
+                      <ListingApplications key={index} listing={listing} setListingToEdit={setApplicationToView} />
                     ))}
                 </Grid>
               </Route>

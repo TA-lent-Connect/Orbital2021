@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = '/api/listings'
+const baseUrl = '/api/applications'
 
 let token = null
 

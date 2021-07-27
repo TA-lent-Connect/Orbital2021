@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -60,11 +60,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PageModulesStudent({user, setUser, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
+export default function PageModulesStudent({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
   const classes = useStyles();
 
   const [page, setPage] = useState(1)
-  //const [newFind, setNewFind] = useState('')
   const [newFind, setNewFind] = useState(listingToEdit ? listingToEdit.module : '')
 
   const handlePageChange = (event, value) => {

@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function CreateNewListing({user, addListing, modules, listings, initialModule}) {
+export default function CreateNewListing({user, addListing, addUpload, modules, listings, initialModule, uploads, setUploads}) {
   const classes = useStyles();
 
   const [module, setModule] = useState(initialModule || '')
@@ -82,6 +82,7 @@ export default function CreateNewListing({user, addListing, modules, listings, i
   const [requirements, setRequirements] = useState('')
   const [applicationProcess, setApplicationProcess] = useState('')
   const [otherInfo, setOtherInfo] = useState('')
+  const [fileName, setFileName] = useState('')
 
   const [moduleError, setModuleError] = useState(null);
   const [acadYearError, setAcadYearError] = useState(null);
@@ -181,7 +182,7 @@ export default function CreateNewListing({user, addListing, modules, listings, i
       case 1:
         return <ApplicationForm numberOfOpenings={numberOfOpenings} setNumberOfOpenings={setNumberOfOpenings} numberOfOpeningsError={numberOfOpeningsError} deadline={deadline} setDeadline={setDeadline} deadlineError={deadlineError} requirements={requirements} setRequirements={setRequirements} applicationProcess={applicationProcess} setApplicationProcess={setApplicationProcess} />;
       case 2:
-        return <AttachmentForm otherInfo={otherInfo} setOtherInfo={setOtherInfo} />;
+        return <AttachmentForm otherInfo={otherInfo} setOtherInfo={setOtherInfo} uploads={uploads} setUploads={setUploads} addUpload={addUpload} fileName={fileName} setFileName={setFileName}/>;
       default:
         throw new Error('Unknown step');
     }
@@ -203,6 +204,7 @@ export default function CreateNewListing({user, addListing, modules, listings, i
       applicationProcess: applicationProcess,
       otherInfo: otherInfo,
       subscribers: [user.username],
+      fileName: fileName,
     }
     console.log(newListing)
     addListing(newListing)

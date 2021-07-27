@@ -4,11 +4,11 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import AttachmentIcon from '@material-ui/icons/Attachment';
+import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import ReactFileReader from "react-file-reader";
-import FormData from 'form-data';
+
+
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AttachmentForm({otherInfo, setOtherInfo, uploads, setUploads, addUpload, fileName, setFileName}) {
+export default function ApplicaitonAttachmentForm({otherInfo, setOtherInfo, fileName, setFileName}) {
   const classes = useStyles();
 
   const handleOtherInfoChange = (event) => {
@@ -30,28 +30,9 @@ export default function AttachmentForm({otherInfo, setOtherInfo, uploads, setUpl
   }
 
   const handleCapture = ({target}) => {
-
-    var formData = new FormData();
-    formData.set('name', target.files[0].name)
-    formData.append('file', target.files[0])
-    console.log(formData.get('name'))
-    console.log(formData.get('file'))
+    console.log(target.files[0])
     setFileName(target.files[0].name)
     setFileUploaded(true);
-    // var reader = new FileReader();
-    // reader.onload = function(e) {
-    //   console.log(e.target.result)
-    //   var arrayBuffer = reader.result
-    //   console.log(target.files[0])
-    //   const newUpload = {
-    //       name: target.files[0].name,
-    //       file: arrayBuffer,
-    //     }
-    //   console.log(newUpload.file)
-    //   addUpload(arrayBuffer)
-    // };
-    addUpload(formData)
-    // reader.readAsArrayBuffer(target.files[0]);
   }
 
   const handleDelete = () => {
@@ -63,7 +44,7 @@ export default function AttachmentForm({otherInfo, setOtherInfo, uploads, setUpl
 
   const showFile = (
     <Grid>
-  <Typography variant="body2" color="textPrimary" align="center">
+  <Typography variant="body2" color="textPrimary" align="left">
   <br></br>
   {fileName}
   <IconButton onClick={handleDelete} align="center"> 
@@ -77,7 +58,7 @@ export default function AttachmentForm({otherInfo, setOtherInfo, uploads, setUpl
     <React.Fragment>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-        <Button
+          <Button
             variant="contained"
             color="primary"
             size="large"
@@ -86,15 +67,15 @@ export default function AttachmentForm({otherInfo, setOtherInfo, uploads, setUpl
             // ng-click="submit()"
             component="label"
           >
-            Upload File
+            Upload Resume / Supporting Document
             <input 
               type="file"
               hidden
               onChange={handleCapture}
               />
           </Button>
+          {fileUploaded ? showFile : null}
         </Grid>
-        {fileUploaded ? showFile : null}
         <Grid item xs={12}>
           <TextField
             id="otherInfo"

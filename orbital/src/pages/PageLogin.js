@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import listingService from '../services/listings'
+import applicationService from '../services/applications'
 import loginService from '../services/login'
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -63,6 +63,15 @@ const PageLogin = ({ setUser }) => {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       listingService.setToken(user.token)
+    }
+  }, [])  
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      applicationService.setToken(user.token)
     }
   }, [])  
 

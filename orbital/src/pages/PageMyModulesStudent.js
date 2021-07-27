@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -7,9 +7,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
-import { mainListItems } from '../components/ProfListItems';
+import { mainListItems } from '../components/StudentListItems';
 import ListingStudent from '../components/ListingStudent'
-import listingService from '../services/listings'
+import applicationService from '../services/applications'
 import Logo from '../components/logo.png';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Grid from '@material-ui/core/Grid';
@@ -19,6 +19,7 @@ import ViewListingStudent from '../components/ViewListingStudent';
 import Tooltip from '@material-ui/core/Tooltip';
 import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
 import HistoryIcon from '@material-ui/icons/History';
+import CreateNewApplication from '../components/CreateNewApplication';
 
 
 const drawerWidth = 230;
@@ -53,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PageMyModulesStudent({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
+export default function PageMyModulesStudent({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit, applications, setApplications}) {
   const classes = useStyles();
 
   const [byAlpha, setByAlpha] = useState(false)
@@ -72,31 +73,6 @@ export default function PageMyModulesStudent({user, logout, modules, listings, s
     return 0;
   }
 
-  const addListing = (listingObject) => {
-    listingService
-      .create(listingObject)
-      .then(returnedListing => {
-        setListings(listings.concat(returnedListing))
-      })
-  }
-
-  const editListing = (id, listingObject) => {
-    listingService
-      .update(id, listingObject)
-      .then(returnedListing => {
-        setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
-      })
-  }
-
-  const deleteListing = (id) => {
-    listingService
-      .destroy(id)
-      .then(setListings(listings.filter(listing => {
-          return listing.id === id
-        }))
-      )
-  }
-
   const myListings = byAlpha ? listings.filter(listing => {
     if (user !== undefined) {
       return (listing.subscribers.filter(sub => sub === user.username).length === 1)
@@ -107,14 +83,13 @@ export default function PageMyModulesStudent({user, logout, modules, listings, s
     }
   }).reverse() 
 
-
-  // const myListings = listings.filter(listing => {
-  //   if (user !== undefined) {
-  //     return (listing.subscribers.filter(sub => sub === user.username).length === 1)
-  //   }
-  // })
-
-  console.log(listings)
+  const addApplication = (applicationObject) => {
+    applicationService
+      .create(applicationObject)
+      .then(returnedApplication => {
+        setApplications(applications.concat(returnedApplication))
+      })
+  }
 
 
   return (
@@ -176,6 +151,14 @@ export default function PageMyModulesStudent({user, logout, modules, listings, s
         <Toolbar />
         <Router>
             <Switch>
+            <Route path="/apply/createnewapplication">
+              <CreateNewApplication
+                user={user}
+                addApplication={addApplication}
+                modules={modules}
+                initialModule={listingToEdit}
+              />
+            </Route>
               <Route path="/listings/:moduleCode">
               <ViewListingStudent user={user} listing={listingToEdit} listings={listings} setListings={setListings} />
               </Route>
@@ -204,7 +187,7 @@ export default function PageMyModulesStudent({user, logout, modules, listings, s
                     )}
                   </Grid>
                     {myListings.map((listing, index) => (
-                      <ListingStudent key={index} user={user} listing={listing} setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} />
+                      <ListingStudent key={index} user={user} listing={listing} setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} applications={applications} setApplications={setApplications} />
                     ))}
                 </Grid>
               </Route>
@@ -233,7 +216,7 @@ export default function PageMyModulesStudent({user, logout, modules, listings, s
                     )}
                   </Grid>
                     {myListings.map((listing, index) => (
-                      <ListingStudent key={index} user={user} listing={listing} setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} />
+                      <ListingStudent key={index} user={user} listing={listing} setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} applications={applications} setApplications={setApplications} />
                     ))}
                 </Grid>
               </Route>

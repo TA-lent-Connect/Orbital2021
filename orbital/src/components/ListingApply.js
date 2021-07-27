@@ -9,7 +9,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { useHistory } from 'react-router-dom'
 
-
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -28,15 +27,14 @@ const useStyles = makeStyles({
   },
 });
 
-const ListingApplications = ({ listing, setListingToEdit}) => {
+const ListingApply = ({ listing, setListingToEdit}) => {
   const classes = useStyles();
 
   const history = useHistory();
 
   const viewListing = () => {
-    history.push(`/applications/${listing.module}`);
+    history.push(`/listings/${listing.module}`);
     setListingToEdit(listing)
-    console.log(listing)
   }
 
   return listing !== undefined ? (
@@ -64,12 +62,17 @@ const ListingApplications = ({ listing, setListingToEdit}) => {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="primary" button onClick= {() => {
-                        history.push(`/applications/${listing.module}`);
-                        setListingToEdit(listing)
-                        console.log(`Button Push: ${listing}`)
+        <Button size="small" color="primary" onClick= {() => {
+            history.push(`/listings/${listing.module}`);
+            setListingToEdit(listing)
           }}>
-            View Applications
+            View Listing
+          </Button>
+          <Button size="small" color="primary" button onClick= {() => {
+            history.push(`/apply/${listing.module}`);
+            setListingToEdit(listing)
+          }}>
+            Apply
           </Button>
         </CardActions>
       </Card>
@@ -77,4 +80,4 @@ const ListingApplications = ({ listing, setListingToEdit}) => {
   ) : null; // Or have some loading screen;
 };
 
-export default ListingApplications;
+export default ListingApply;

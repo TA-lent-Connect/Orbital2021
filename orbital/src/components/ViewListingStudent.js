@@ -153,8 +153,8 @@ const ViewListingStudent = ({ user, listing , listings, setListings}) => {
                 {listing.requirements} <br></br> <br></br>
                 Application Process: <br></br>
                 {listing.applicationProcess} <br></br> <br></br>
-                Attachments: <br></br>
-                link <br></br> <br></br>
+                File Uploaded: <br></br>
+                <a href="https://www.google.com" target="_blank"> {listing.fileName === '' ? null : listing.fileName}</a> <br></br> <br></br>
                 Other information: <br></br>
                 {listing.otherInfo} <br></br><br></br>
               </Typography>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -67,7 +67,6 @@ export default function PageModulesMC({user, logout, modules, listings, setListi
   const classes = useStyles();
 
   const [page, setPage] = useState(1)
-  //const [newFind, setNewFind] = useState('')
   const [newFind, setNewFind] = useState(listingToEdit ? listingToEdit.module : '')
 
   const addListing = (listingObject) => {
@@ -93,13 +92,6 @@ export default function PageModulesMC({user, logout, modules, listings, setListi
       .then(returnedListing => {
         setListings(listings.concat(returnedListing))
       })
-
-    // listingService
-    //   .update(id, listingObject)
-    //   .then(returnedListing => {
-    //     setListings(listings.filter(listing => {return listing.id === id}).concat(returnedListing))
-    //     //setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
-    //   })
   }
 
   const deleteListing = (id) => {
@@ -257,7 +249,6 @@ export default function PageModulesMC({user, logout, modules, listings, setListi
                     </Route>
                   </Switch>
                 </Router>
-                {/* <PageListingsMC user={user} logout={logout} modules={modules} listings={listings} setListings={setListings} listingToEdit={listingToEdit} setListingToEdit={setListingToEdit} /> */}
               </Route>
               <Route path="/listings/:moduleCode">
                 <ViewListing user={user} listing={listingToEdit} setListingToEdit={setListingToEdit} />
