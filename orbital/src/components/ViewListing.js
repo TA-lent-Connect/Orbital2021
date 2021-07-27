@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -13,7 +13,12 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
+import uploadService from '../services/uploads'
 import Disqus from "disqus-react"
+import fileDownload from 'js-file-download'
+import Link from '@material-ui/core/Link';
+
+
 
 const useStyles = makeStyles({
   root: {
@@ -32,7 +37,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ViewListing = ({user, listing, setListingToEdit}) => {
+const ViewListing = ({user, listing, setListingToEdit, uploads}) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -47,6 +52,29 @@ const ViewListing = ({user, listing, setListingToEdit}) => {
       identifier: listing.module,
       title: "Discussion"
     }
+
+    const [downloadFile, setDownloadFile] = useState('');
+
+    const obtainFile = (id) => {
+      uploadService.getFile(id)
+      .then(returnedFile =>
+        console.log(returnedFile)
+      )}
+
+      
+      // .then(returnedFile => {
+      //   console.log(returnedFile)
+      //   // console.log(returnedFile)
+      //   const blob = new Blob([returnedFile.data],  { type: "application/octetstream" })
+      //   setDownloadFile(blob)
+
+    // const handleClick = () => {
+    //   obtainFile(listing.fileName)
+    //   console.log(downloadFile)
+    //   console.log('IMh ere')
+    //   fileDownload(downloadFile, listing.fileName)
+    // }
+    
 
   return listing !== undefined ? (
     <Grid container spacing={3}>
@@ -119,8 +147,10 @@ const ViewListing = ({user, listing, setListingToEdit}) => {
                 {listing.requirements} <br></br> <br></br>
                 Application Process: <br></br>
                 {listing.applicationProcess} <br></br> <br></br>
-                Attachments: <br></br>
-                link <br></br> <br></br>
+                File Uploaded: <br></br>
+                {listing.fileName === '' ? null : (<Link onClick={obtainFile(listing.fileName)}> {listing.fileName} </Link>)}
+                 <br></br> <br></br>
+                {/* {listing.fileName === '' ? null : listing.fileName} <br></br> <br></br> */}
                 Other information: <br></br>
                 {listing.otherInfo} <br></br><br></br>
               </Typography>

@@ -8,52 +8,64 @@ import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import AppsIcon from '@material-ui/icons/Apps';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 
+const pageSelected = window.history.state;
+
 export const mainListItems = (
   <div>
-    <ListItem button onClick= {() => {
+    <ListItem 
+    // selected={window.history.state === "ApplyLandingPage"}
+    button onClick= {() => {
       window.history.pushState("ApplyLandingPage","ApplyLandingPage", "/apply");
       window.location.reload(false);
     }}>
       <ListItemIcon>
-        <PeopleIcon />
+        <PeopleIcon style={pageSelected === 'ApplyLandingPage' ? {fill: "#ff5722"} : {fill: "#000000"}} />
       </ListItemIcon>
-      <ListItemText primary="Apply" />
+      <ListItemText primary="Apply" style={pageSelected === 'ApplyLandingPage' ? {color: "#ff5722"} : {color: "#000000"}}/>
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem 
+    // selected={window.history.state === "MyModulesLandingPage"}
+    button onClick= {() => {
       window.history.pushState("MyModulesLandingPage","MyModulesLandingPage", "/mymodules");
       window.location.reload(false);
     }}>
       <ListItemIcon>
-        <DashboardIcon />
+        <DashboardIcon style={pageSelected === 'MyModulesLandingPage' ? {fill: "#ff5722"} : {fill: "#000000"}} />
       </ListItemIcon>
-      <ListItemText primary="MyModules" />
+      <ListItemText primary="MyModules" style={pageSelected === 'MyModulesLandingPage' ? {color: "#ff5722"} : {color: "#000000"}}/>
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem 
+    // selected={window.history.state === "ListingsLandingPage" || window.history.state === "StudentLandingPage"}
+    button onClick= {() => {
       window.history.pushState("ListingsLandingPage","ListingsLandingPage", "/listings");
       window.location.reload(false);
     }}>
       <ListItemIcon>
-        <FormatListBulletedIcon />
+        <FormatListBulletedIcon style={(pageSelected === 'ListingsLandingPage' || pageSelected === "StudentLandingPage") ? {fill: "#ff5722"} : {fill: "#000000"}} />
       </ListItemIcon>
-      <ListItemText primary="Listings" />
+      <ListItemText primary="Listings" style={(pageSelected === 'ListingsLandingPage' || pageSelected === "StudentLandingPage") ? {color: "#ff5722"} : {color: "#000000"}}/>
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem 
+    // selected={window.history.state === "ModulesLandingPage"}
+    button onClick= {() => {
       window.history.pushState("ModulesLandingPage","ModulesLandingPage", "/modules");
       window.location.reload(false);
     }}>
       <ListItemIcon>
-        <AppsIcon />
+        <AppsIcon style={pageSelected === 'ModulesLandingPage' ? {fill: "#ff5722"} : {fill: "#000000"}} />
       </ListItemIcon>
-      <ListItemText primary="Modules" />
+      <ListItemText primary="Modules" style={pageSelected === 'ModulesLandingPage' ? {color: "#ff5722"} : {color: "#000000"}}/>
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem 
+    // selected={window.history.state === "SettingsLandingPage"}
+    button onClick= {() => {
       window.history.pushState("SettingsLandingPage","SettingsLandingPage", "/settings");
       window.location.reload(false);
     }}>
       <ListItemIcon>
-        <SettingsIcon />
+        <SettingsIcon style={pageSelected === 'SettingsLandingPage' ? {fill: "#ff5722"} : {fill: "#000000"}}  />
       </ListItemIcon>
-      <ListItemText primary="Settings" />
+      <ListItemText primary="Settings" style={pageSelected === 'SettingsLandingPage' ? {color: "#ff5722"} : {color: "#000000"}} />
     </ListItem>
   </div>
 );

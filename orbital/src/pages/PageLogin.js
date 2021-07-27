@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import listingService from '../services/listings'
+import applicationService from '../services/applications'
 import loginService from '../services/login'
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -13,8 +13,8 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import ErrorAlert from '../components/ErrorAlert'
-import Logo from '../components/logo.png';
+import ErrorAlert from '../components/ErrorAlert';
+import Logo from '../components/loginlogo.png';
 
 function Copyright() {
   return (
@@ -66,6 +66,15 @@ const PageLogin = ({ setUser }) => {
     }
   }, [])  
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      applicationService.setToken(user.token)
+    }
+  }, [])  
+
   const handleUsernameChange = (event) => {
     setUsername(event.target.value)
   }
@@ -102,10 +111,8 @@ const PageLogin = ({ setUser }) => {
       <ErrorAlert alert={alert} setAlert={setAlert} errorMessage={"Invalid Username or Password"} />
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <img src={Logo} />
-        </Avatar>
-        <Typography component="h1" variant="h5">
+        <img src={Logo} />
+        <Typography component="p" variant="h5">
           Sign in
         </Typography>
         <form className={classes.form} noValidate onSubmit={ handleLogin }>

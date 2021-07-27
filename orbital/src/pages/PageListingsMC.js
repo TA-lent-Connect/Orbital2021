@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import { formatMs, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -23,6 +23,7 @@ import EditListing from '../components/EditListing';
 import Tooltip from '@material-ui/core/Tooltip';
 import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
 import HistoryIcon from '@material-ui/icons/History';
+import fileDownload from 'js-file-download'
 
 
 const drawerWidth = 240;
@@ -61,8 +62,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function PageListingsMC({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
+export default function PageListingsMC({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit, uploads, setUploads}) {
   const classes = useStyles();
+
+  console.log(uploads)
   
   const [newFind, setNewFind] = useState(listingToEdit ? listingToEdit.module : '')
 
@@ -97,13 +100,6 @@ export default function PageListingsMC({user, logout, modules, listings, setList
       .then(returnedListing => {
         setListings(listings.concat(returnedListing))
       })
-
-    // listingService
-    //   .update(id, listingObject)
-    //   .then(returnedListing => {
-    //     setListings(listings.filter(listing => {return listing.id === id}).concat(returnedListing))
-    //     //setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
-    //   })
   }
 
   const deleteListing = (id) => {
@@ -115,6 +111,8 @@ export default function PageListingsMC({user, logout, modules, listings, setList
       )
   }
 
+
+
   const handleFindChange = (event) => {
     setNewFind(event.target.value)
   }
@@ -124,12 +122,6 @@ export default function PageListingsMC({user, logout, modules, listings, setList
   }).sort(alphaCompare) : listings.filter(listing => {
     return listing.module.toLowerCase().includes(newFind.toLowerCase().trim()) || listing.title.toLowerCase().includes(newFind.toLowerCase().trim())
   }).reverse() 
-
-
-  // const ListingsToShow = listings.filter(listing => {
-  //   return listing.module.toLowerCase().includes(newFind.toLowerCase().trim()) || listing.title.toLowerCase().includes(newFind.toLowerCase().trim())
-  // }).reverse()
-
 
   return (
     <div className={classes.root}>
@@ -194,7 +186,7 @@ export default function PageListingsMC({user, logout, modules, listings, setList
                 <EditListing user={user} editListing={editListing} modules={modules} listingToEdit={listingToEdit} deleteListing={deleteListing} listings={listings} />
               </Route>
               <Route path="/listings/:moduleCode">
-                <ViewListing user={user} listing={listingToEdit} setListingToEdit={setListingToEdit} />
+                <ViewListing user={user} listing={listingToEdit} setListingToEdit={setListingToEdit} uploads={uploads}/>
               </Route>
               <Route path="/listings">
                 <Grid container spacing={3} alignItems="center">

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import { formatMs, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -21,6 +21,8 @@ import ViewListingStudent from '../components/ViewListingStudent';
 import Tooltip from '@material-ui/core/Tooltip';
 import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
 import HistoryIcon from '@material-ui/icons/History';
+import CreateNewApplication from '../components/CreateNewApplication';
+import applicationService from '../services/applications'
 
 
 const drawerWidth = 240;
@@ -59,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function PageListingsStudent({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
+export default function PageListingsStudent({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit, applications, setApplications}) {
   const classes = useStyles();
   
   const [newFind, setNewFind] = useState(listingToEdit ? listingToEdit.module : '')
@@ -80,6 +82,14 @@ export default function PageListingsStudent({user, logout, modules, listings, se
     return 0;
   }
 
+  const addApplication = (applicationObject) => {
+    applicationService
+      .create(applicationObject)
+      .then(returnedApplication => {
+        setApplications(applications.concat(returnedApplication))
+      })
+  }
+
 
   const handleFindChange = (event) => {
     setNewFind(event.target.value)
@@ -90,10 +100,6 @@ export default function PageListingsStudent({user, logout, modules, listings, se
   }).sort(alphaCompare) : listings.filter(listing => {
     return listing.module.toLowerCase().includes(newFind.toLowerCase().trim()) || listing.title.toLowerCase().includes(newFind.toLowerCase().trim())
   }).reverse() 
-
-  // const ListingsToShow = listings.filter(listing => {
-  //   return listing.module.toLowerCase().includes(newFind.toLowerCase().trim()) || listing.title.toLowerCase().includes(newFind.toLowerCase().trim())
-  // })
 
 
   return (
@@ -155,6 +161,14 @@ export default function PageListingsStudent({user, logout, modules, listings, se
         <Toolbar />
         <Router>
             <Switch>
+            <Route path="/apply/createnewapplication">
+              <CreateNewApplication
+                user={user}
+                addApplication={addApplication}
+                modules={modules}
+                initialModule={listingToEdit}
+              />
+            </Route>
               <Route path="/listings/:moduleCode">
                 <ViewListingStudent user={user} listing={listingToEdit} listings={listings} setListings={setListings} />
               </Route>
@@ -200,7 +214,7 @@ export default function PageListingsStudent({user, logout, modules, listings, se
                     )}
                   </Grid>
                   {ListingsToShow.map((listing, index) => (
-                    <ListingStudent key={index} user={user} listing={listing} setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} />
+                    <ListingStudent key={index} user={user} listing={listing} setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} applications={applications} />
                   ))}
                 </Grid>
               </Route>
@@ -246,7 +260,7 @@ export default function PageListingsStudent({user, logout, modules, listings, se
                     )}
                   </Grid>
                   {ListingsToShow.map((listing, index) => (
-                    <ListingStudent key={index} user={user} listing={listing}  setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} />
+                    <ListingStudent key={index} user={user} listing={listing}  setListingToEdit={setListingToEdit} listings={listings} setListings={setListings} applications={applications} />
                   ))}
                 </Grid>
               </Route>

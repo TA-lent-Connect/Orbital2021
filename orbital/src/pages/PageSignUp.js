@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import userService from '../services/users'
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -13,7 +12,7 @@ import Container from '@material-ui/core/Container';
 import MenuItem from '@material-ui/core/MenuItem';
 import ErrorAlert from '../components/ErrorAlert'
 import SuccessAlert from '../components/SuccessAlert'
-import Logo from '../components/logo.png';
+import Logo from '../components/loginlogo.png';
 
 function Copyright() {
   return (
@@ -167,9 +166,7 @@ const SignUp = () => {
       <SuccessAlert alert={successAlert} setAlert={setSuccessAlert} successMessage={"User Successfully Created"} />
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <img src={Logo} />
-        </Avatar>
+      <img src={Logo} />
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>

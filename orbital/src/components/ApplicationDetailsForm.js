@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 
-export default function ModuleForm({user, module, setModule, moduleError, acadYear, setAcadYear, acadYearError, semester, setSemester, semesterError, moduleCoordinator, setModuleCoordinator, moduleCoordinatorError, email, setEmail, emailError, jobScope, setJobScope}) {
+export default function ApplicationDetailsForm({user, module, setModule, moduleError, acadYear, setAcadYear, acadYearError, semester, setSemester, semesterError, name, setName, nameError, email, setEmail, emailError, major, setMajor, majorError, studyYear, setStudyYear, studyYearError}) {
 
   const handleModuleChange = (event) => {
     setModule(event.target.value)
@@ -14,14 +14,17 @@ export default function ModuleForm({user, module, setModule, moduleError, acadYe
   const handleSemesterChange = (event) => {
     setSemester(event.target.value)
   }
-  const handleModuleCoordinatorChange = (event) => {
-    setModuleCoordinator(event.target.value)
+  const handleNameChange = (event) => {
+    setName(event.target.value)
   }
   const handleEmailChange = (event) => {
     setEmail(event.target.value)
   }
-  const handleJobScopeChange = (event) => {
-    setJobScope(event.target.value)
+  const handleMajorChange = (event) => {
+    setMajor(event.target.value)
+  }
+  const handleStudyYearChange = (event) => {
+    setStudyYear(event.target.value)
   }
 
   return (
@@ -80,15 +83,14 @@ export default function ModuleForm({user, module, setModule, moduleError, acadYe
         <Grid item xs={12}>
           <TextField
             required
-            id="moduleCoordinator"
-            name="moduleCoordinator"
-            label="Module Coordinator"
-            defaultValue={user.name}
+            id="name"
+            name="name"
+            label="Full Name"
             fullWidth
-            value={moduleCoordinator}
-            onChange={handleModuleCoordinatorChange}
-            error={moduleCoordinatorError === "Please enter your name"}
-            helperText={moduleCoordinatorError}
+            value={name}
+            onChange={handleNameChange}
+            error={nameError === "Please enter your name"}
+            helperText={nameError}
           />
         </Grid>
         <Grid item xs={12}>
@@ -97,7 +99,6 @@ export default function ModuleForm({user, module, setModule, moduleError, acadYe
             id="email"
             name="email"
             label="Email"
-            defaultValue={user.email}
             fullWidth
             value={email}
             onChange={handleEmailChange}
@@ -105,18 +106,39 @@ export default function ModuleForm({user, module, setModule, moduleError, acadYe
             helperText={emailError}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={6}>
           <TextField
-            id="jobScope"
-            name="jobScope"
-            label="Job Scope"
-            multiline
-            rows={8}
+            required
+            id="major"
+            name="major"
+            label="Major"
             fullWidth
-            value={jobScope}
-            onChange={handleJobScopeChange}
-
-          />
+            value={major}
+            onChange={handleMajorChange}
+            error={majorError === "Please choose your major"}
+            helperText={majorError}
+          >
+          </TextField>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="studyYear"
+            name="studyYear"
+            label="Year of Study"
+            fullWidth
+            value={studyYear}
+            onChange={handleStudyYearChange}
+            select
+            error={studyYearError === "Please select your year of study"}
+            helperText={studyYearError}
+          >
+            <MenuItem value={"Year 1"}>Year 1</MenuItem>
+            <MenuItem value={"Year 2"}>Year 2</MenuItem>
+            <MenuItem value={"Year 3"}>Year 3</MenuItem>
+            <MenuItem value={"Year 4"}>Year 4</MenuItem>
+            <MenuItem value={"Other"}>Other</MenuItem>
+          </TextField>
         </Grid>
       </Grid>
     </React.Fragment>

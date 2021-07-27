@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -12,6 +12,7 @@ import CreateNewListing from '../components/CreateNewListing'
 import NewListingButton from '../components/NewListingButton';
 import ListingProf from '../components/ListingProf'
 import listingService from '../services/listings'
+import uploadService from '../services/uploads'
 import Logo from '../components/logo.png';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Grid from '@material-ui/core/Grid';
@@ -56,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PageMyModules({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit}) {
+export default function PageMyModules({user, logout, modules, listings, setListings, listingToEdit, setListingToEdit, uploads, setUploads}) {
   const classes = useStyles();
 
   const [byAlpha, setByAlpha] = useState(false)
@@ -98,13 +99,6 @@ export default function PageMyModules({user, logout, modules, listings, setListi
       .then(returnedListing => {
         setListings(listings.concat(returnedListing))
       })
-
-    // listingService
-    //   .update(id, listingObject)
-    //   .then(returnedListing => {
-    //     setListings(listings.filter(listing => {return listing.id === id}).concat(returnedListing))
-    //     //setListings(listings.map(listing => listing.id !== id ? listing : returnedListing))
-    //   })
   }
 
   const deleteListing = (id) => {
@@ -114,6 +108,13 @@ export default function PageMyModules({user, logout, modules, listings, setListi
           return listing.id === id
         }))
       )
+  }
+
+  const addUpload = (uploadFile) => {
+    uploadService.create(uploadFile)
+    .then(returnedFile => {
+      setUploads(uploads.concat(returnedFile))
+    })
   }
 
 
@@ -128,6 +129,7 @@ export default function PageMyModules({user, logout, modules, listings, setListi
   }).reverse() 
 
   console.log(myListings)
+  console.log(`My Listings: ${myListings}`)
 
 
 
@@ -194,7 +196,7 @@ export default function PageMyModules({user, logout, modules, listings, setListi
                 <EditListing user={user} editListing={editListing} modules={modules} listingToEdit={listingToEdit} deleteListing={deleteListing} listings={listings} />
               </Route>
               <Route path="/mymodules/createnewlisting">
-                <CreateNewListing user={user} addListing={addListing} modules={modules} listings={listings} />
+                <CreateNewListing user={user} addListing={addListing} addUpload={addUpload} modules={modules} listings={listings} uploads={uploads} setUploads={setUploads}/>
               </Route>
               <Route path="/mymodules/:moduleCode">
                 <ViewListing user={user} listing={listingToEdit} setListingToEdit={setListingToEdit} />

@@ -2,60 +2,74 @@ import React from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
-import AssignmentIcon from '@material-ui/icons/Assignment';
 import SettingsIcon from '@material-ui/icons/Settings';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import AppsIcon from '@material-ui/icons/Apps';
 
+
+
+  const pageSelected = window.history.state;
+  console.log(pageSelected)
+
+
 export const mainListItems = (
   <div>
-    <ListItem button onClick= {() => {
+    <ListItem 
+    // selected={window.history.state === "ApplicationsLandingPage"}
+    button onClick= {() => {
       window.history.pushState("ApplicationsLandingPage","ApplicationsLandingPage", "/applications");
       window.location.reload(false);
     }}>
       <ListItemIcon>
-        <PeopleIcon />
+        <PeopleIcon style={pageSelected === 'ApplicationsLandingPage' ? {fill: "#ff5722"} : {fill: "#000000"}} />
       </ListItemIcon>
-      <ListItemText primary="Applications" />
+      <ListItemText primary="Applications" style={pageSelected === 'ApplicationsLandingPage' ? {color: "#ff5722"} : {color: "#000000"}} />
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem 
+    // selected={window.history.state === "MyModulesLandingPage"}
+    button onClick= {() => {
       window.history.pushState("MyModulesLandingPage","MyModulesLandingPage", "/mymodules");
       window.location.reload(false);
     }}>
       <ListItemIcon>
-        <DashboardIcon />
+        <DashboardIcon style={(pageSelected === 'MyModulesLandingPage' || pageSelected === "ModuleCoordinatorLandingPage") ? {fill: "#ff5722"} : {fill: "#000000"}} />
       </ListItemIcon>
-      <ListItemText primary="MyModules" />
+      <ListItemText primary="MyModules" style={(pageSelected === 'MyModulesLandingPage' || pageSelected === "ModuleCoordinatorLandingPage") ? {color: "#ff5722"} : {color: "#000000"}}/>
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem 
+    // selected={window.history.state === "ListingsLandingPage" || window.history.state === "ModuleCoordinatorLandingPage"}
+    button onClick= {() => {
       window.history.pushState("ListingsLandingPage","ListingsLandingPage", "/listings");
       window.location.reload(false);
     }}>
       <ListItemIcon>
-        <FormatListBulletedIcon />
+        <FormatListBulletedIcon style={pageSelected === 'ListingsLandingPage' ? {fill: "#ff5722"} : {fill: "#000000"}} />
       </ListItemIcon>
-      <ListItemText primary="Listings" />
+      <ListItemText primary="Listings" style={pageSelected === 'ListingsLandingPage' ? {color: "#ff5722"} : {color: "#000000"}}/>
     </ListItem>
-    <ListItem button onClick= {() => {
+    <ListItem 
+    // selected={window.history.state === "ModulesLandingPage"}
+    button onClick= {() => {
       window.history.pushState("ModulesLandingPage","ModulesLandingPage", "/modules");
       window.location.reload(false);
     }}>
       <ListItemIcon>
-        <AppsIcon />
+        <AppsIcon style={pageSelected === 'ModulesLandingPage' ? {fill: "#ff5722"} : {fill: "#000000"}} />
       </ListItemIcon>
-      <ListItemText primary="Modules" />
+      <ListItemText primary="Modules" style={pageSelected === 'ModulesLandingPage' ? {color: "#ff5722"} : {color: "#000000"}} />
     </ListItem>
-    <ListItem button>
+    <ListItem 
+    // selected={window.history.state === "SettingsLandingPage"}
+    button onClick= {() => {
+      window.history.pushState("SettingsLandingPage","SettingsLandingPage", "/settings");
+      window.location.reload(false);
+    }}>
       <ListItemIcon>
-        <SettingsIcon />
+        <SettingsIcon style={pageSelected === 'SettingsLandingPage' ? {fill: "#ff5722"} : {fill: "#000000"}} />
       </ListItemIcon>
-      <ListItemText primary="Settings" />
+      <ListItemText primary="Settings" style={pageSelected === 'SettingsLandingPage' ? {color: "#ff5722"} : {color: "#000000"}}/>
     </ListItem>
   </div>
 );
