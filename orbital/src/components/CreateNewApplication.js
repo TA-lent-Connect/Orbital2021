@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function CreateNewApplication({user, addApplication, modules, initialModule}) {
+export default function CreateNewApplication({user, addApplication, modules, listings, initialModule}) {
   const classes = useStyles();
 
   const [module, setModule] = useState((initialModule !== undefined) ? initialModule.module : '')
@@ -94,12 +94,12 @@ export default function CreateNewApplication({user, addApplication, modules, ini
 
   const handleNext = () => {
     if (activeStep === 0){
-      const moduleFound = modules.filter(module1 => {
-        return module1.moduleCode === module.trim()
+      const moduleFound = listings.filter(module1 => {
+        return module1.module === module.trim()
       })
       console.log(moduleFound)
       if (moduleFound.length === 0) {
-        setModuleError("Module not found")
+        setModuleError("Listing for this module code not found")
       }
       else {
         setTitle(moduleFound[0].title)
@@ -108,14 +108,14 @@ export default function CreateNewApplication({user, addApplication, modules, ini
       if (acadYear === "") {
         setAcadYearError("Please choose an academic year")
       }
-      else {
+       else {
         setAcadYearError("")
       }
       if (studyYear === "") {
         setStudyYearError("Please select your year of study")
       }
       else {
-        setAcadYearError("")
+        setStudyYearError("")
       }
       if (major === "") {
         setMajorError("Please choose your major")
@@ -141,7 +141,7 @@ export default function CreateNewApplication({user, addApplication, modules, ini
       else {
         setEmailError("")
       }
-      if (moduleFound.length !== 0 && acadYear !== "" && semester !== "" && name.trim() !== "" && email.trim() !== "" && major.trim() !== "" && studyYear.trim() !== "") {
+      if (moduleFound.length !== 0 && acadYear !== "" && semester !== "" && name.trim() !== "" && email.trim() !== "" && major.trim() !== "" && studyYear.trim() !== "" && moduleError === "") {
         setActiveStep(activeStep + 1);
       }
     }

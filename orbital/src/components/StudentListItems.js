@@ -56,16 +56,5 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Modules" style={pageSelected === 'ModulesLandingPage' ? {color: "#ff5722"} : {color: "#000000"}}/>
     </ListItem>
-    <ListItem 
-    // selected={window.history.state === "SettingsLandingPage"}
-    button onClick= {() => {
-      window.history.pushState("SettingsLandingPage","SettingsLandingPage", "/settings");
-      window.location.reload(false);
-    }}>
-      <ListItemIcon>
-        <SettingsIcon style={pageSelected === 'SettingsLandingPage' ? {fill: "#ff5722"} : {fill: "#000000"}}  />
-      </ListItemIcon>
-      <ListItemText primary="Settings" style={pageSelected === 'SettingsLandingPage' ? {color: "#ff5722"} : {color: "#000000"}} />
-    </ListItem>
   </div>
 );

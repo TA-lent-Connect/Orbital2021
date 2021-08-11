@@ -38,7 +38,7 @@ export default function ApplicationDetailsForm({user, module, setModule, moduleE
             label="Module Code"
             value={module}
             onChange={handleModuleChange}
-            error={moduleError === "Module not found" || moduleError === "Duplicate Listing exists for current academic year and semester"}
+            error={moduleError === "Module not found" || moduleError === "Duplicate Listing exists for current academic year and semester" || moduleError === "Listing for this module code not found"}
             helperText={moduleError}
           />
         </Grid>
@@ -52,7 +52,7 @@ export default function ApplicationDetailsForm({user, module, setModule, moduleE
             value={acadYear}
             onChange={handleAcadYearChange}
             select
-            error={acadYearError === "Please choose an academic year" || acadYearError === "Duplicate Listing exists for current academic year and semester"}
+            error={acadYearError === "Please choose an academic year" || acadYearError === "Duplicate Listing exists for current academic year and semester" || acadYearError === "Listing for corresponding module code and academic year not found"}
             helperText={acadYearError}
           >
             <MenuItem value={"2021/2022"}>2021/2022</MenuItem>
@@ -71,7 +71,7 @@ export default function ApplicationDetailsForm({user, module, setModule, moduleE
             value={semester}
             onChange={handleSemesterChange}
             select
-            error={semesterError === "Please choose a semester" || semesterError === "Duplicate Listing exists for current academic year and semester"}
+            error={semesterError === "Please choose a semester" || semesterError === "Duplicate Listing exists for current academic year and semester" || semesterError === "Listing for corresponding module code and semester not found"}
             helperText={semesterError}
           >
             <MenuItem value={"Semester 1"}>Semester 1</MenuItem>
