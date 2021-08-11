@@ -156,6 +156,7 @@ export default function PageMyModulesStudent({user, logout, modules, listings, s
                 user={user}
                 addApplication={addApplication}
                 modules={modules}
+                listings={listings}
                 initialModule={listingToEdit}
               />
             </Route>
